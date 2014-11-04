@@ -832,17 +832,6 @@ nxty.SendNxtyMsg(NXTY_REGISTRATION_REQ, u8, x.length );
         // Start the handler to be called every second...
         MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
 
-        
-        if( isBluetoothCnx == false )
-        {
-            // Start the spinner..
-            navigator.notification.activityStart( "Please wait", "Searching for Cel-Fi devices..." );
-            UpdateStatusLine("Searching for Cel-Fi devices...");
-        }
-
-        
-
-        
                         
         currentView = "main";
 	},
