@@ -798,7 +798,7 @@ nxty.SendNxtyMsg(NXTY_REGISTRATION_REQ, u8, x.length );
             }
             else
             {
-                showAlert("Registration mode not allowed...", "Bluetooth not connected.");
+                showAlert("Un-Register not allowed...", "Bluetooth not connected.");
             }
 	 	}
 	},
