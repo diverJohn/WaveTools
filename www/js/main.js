@@ -830,7 +830,7 @@ nxty.SendNxtyMsg(NXTY_REGISTRATION_REQ, u8, x.length );
 			
         			
         // Start the handler to be called every second...
-        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
+//        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
 
                         
         currentView = "main";
