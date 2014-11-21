@@ -6,10 +6,12 @@
 var addressKey = "address";
 const   TX_MAX_BYTES_PER_CONN   = 20;
 
-var bridgeServiceUuid           = "6734";
+//var bridgeServiceUuid           = "6734";
 
+// 128-bit UUID must include the dashes.
+// Power cycle phone when changing from 16-bit to 128-bit UUID to remove any local phone storage.
+var bridgeServiceUuid           = "48d60a60-f000-11e3-b42d-0002a5d5c51b";
 
-//var bridgeServiceUuid           = "48d60a60f00011e3b42d0002a5d5c51b";
 
 var bridgeTxCharacteristicUuid  = "6711";       // Tx from the bluetooth device profile, Rx for the phone app.
 var bridgeRxCharacteristicUuid  = "6722";       // Rx from our bluetooth device profile, Tx for the phone app.
@@ -19,6 +21,7 @@ var bridgeRxCharacteristicUuid  = "6722";       // Rx from our bluetooth device 
 var scanTimer = null;
 var connectTimer = null;
 var reconnectTimer = null;
+var subscribeTimer = null;
 
 var iOSPlatform = "iOS";
 var androidPlatform = "Android";
@@ -121,25 +124,28 @@ function startScanSuccess(obj)
   
     var bytes = bluetoothle.encodedStringToBytes(obj.advertisement);
 
-        
     // The returned bytes are...
-    // "2 1 6 3 2 34 67 5 ff 0 1 25 29 7 9 43 65 6c 2d 46 69 3 2 34 67 5 ff 0 1 25 29
-    //  |    advertise data          | |             scan results                   |                      |
-    //                         ^ ^  ^                                         ^ ^  ^
-    //                         | |  Rx Handle                                 | |  Rx Handle
-    //                         | Tx Handle                                    | Tx Handle
-    //                         ICD                                            ICD
-
+    // [0]                                                              [24]                       [28]
+    // "2 1 6 11 6 1b c5 d5 a5 02 00 2d b4 e3 11 00 F0 60 0A D6 48 07 ff 0 1 xx yy 25 29 7 9 43 65 6c 2d 46 69 3 2 34 67 5 ff 0 1 xx yy
+    //  |    advertise data                                                            | |             scan results                   |
+    //                                                                     ^ ^  ^  ^  ^                                         ^ ^  ^
+    //                                                                     | SW Ver|  Rx Handle                                 | |  |
+    //                                                                     |       Tx Handle                                    | SW Version
+    //                                                                    ICD                                                  ICD
 
             
     // Save the Scan Results data...
     if( bytes.length != 0 )
     {
-        for( var i = 1; i < SCAN_RESULTS_SIZE; i++ )
+        for( var i = 0; i < SCAN_RESULTS_SIZE; i++ )
         {
             u8ScanResults[i] = bytes[i];
         }
     }
+ 
+    // Grab the ICD version and SW Version at fixed locations.
+    uIcd        = u8ScanResults[24];
+    swVerBtScan = U8ToHexText(u8ScanResults[25]) + "." + U8ToHexText(u8ScanResults[26]);
  
     var outText = u8ScanResults[0].toString(16);    // Convert to hex output...
     for( i = 1; i < u8ScanResults.length; i++ )
@@ -390,6 +396,10 @@ function discoverSuccess(obj)
 
     	// Now subscribe to the bluetooth tx characteristic...
     	SubscribeBluetoothDevice();
+
+        // Start subscribing for the notifications in 1 second to allow any connection changes
+        // to take place.
+//    	subscribeTimer = setTimeout(SubscribeBluetoothDevice, 1000);
 	}
   	else
   	{
