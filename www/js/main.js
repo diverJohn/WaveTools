@@ -576,6 +576,14 @@ var app = {
                 // Unii up but UART redirect error
                 showAlert("Redirect to NU failed.", "UNII link up.");
             }
+            else
+            {
+                showAlert("Unknown NAK error.  NAK=" + nxtyLastNakType, "Msg Error");
+            }
+        }
+        else
+        {
+            showAlert("Unknown error.  Make sure USB cable is not plugged in.", "Msg Error");
         }
         
     },
@@ -606,6 +614,8 @@ var app = {
         // Start the handler to be called every second...
 //        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
 
+               
+        UpdateStatusLine( "Wavetools ver:  00.01.00");
                         
         currentView = "main";
 	},
