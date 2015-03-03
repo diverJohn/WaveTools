@@ -36,7 +36,7 @@ var msgTimer                = null;
 // Level  4: Timing loops
 // Level 10: Bluetooth processing.
 // Level 99: Error, print in red.
-var PrintLogLevel = 1;
+var PrintLogLevel = 3;
 
 // PrintLog............................................................................................
 function PrintLog(level, txt)
@@ -593,6 +593,97 @@ var app = {
         
     },
 
+
+
+
+    // Handle the Register key
+    handleLockKey: function()
+    {
+        PrintLog(1, "Clear Location Lock key pressed");
+        
+        if( isBluetoothCnx )
+        {
+            // Write 0xDABADABA  to PcCtrl, CellIdTime
+            var u8Buff  = new Uint8Array(20);
+            u8Buff[0] = 0x81;                               // Redirect to NU on entry and exit...   
+            u8Buff[1] = (NXTY_PCCTRL_CELLIDTIME >> 24);    // Note that javascript converts var to INT32 for shift operations.
+            u8Buff[2] = (NXTY_PCCTRL_CELLIDTIME >> 16);
+            u8Buff[3] = (NXTY_PCCTRL_CELLIDTIME >> 8);
+            u8Buff[4] = NXTY_PCCTRL_CELLIDTIME;
+            u8Buff[5] = 0xDA;                    // Note that javascript converts var to INT32 for shift operations.
+            u8Buff[6] = 0xBA;
+            u8Buff[7] = 0xDA;
+            u8Buff[8] = 0xBA;
+            
+            nxty.SendNxtyMsg(NXTY_CONTROL_WRITE_REQ, u8Buff, 9);
+            
+            // Start the spinner..
+            bUniiUp = true;
+            navigator.notification.activityStart( "Clear Location Lock command sent to NU", "Waiting for Response" );
+            msgTimer = setTimeout(app.handleLockKeyRespnose, 5000);
+        
+        }
+        else
+        {
+            if( ImRunningOnBrowser )
+            {
+//                reg.renderRegView();
+            }
+            else
+            {
+                showAlert("Clear Location Lock not allowed...", "Bluetooth not connected.");
+            }
+        }
+    },
+    
+    
+    // Handle the Register key response
+    handleLockKeyRespnose: function()
+    {
+        // Stop the spinner...
+        navigator.notification.activityStop();
+        
+        if( window.msgRxLastCmd == NXTY_CONTROL_WRITE_RSP )
+        {   
+            showAlert("Location Lock should now be cleared...", "Success");
+        }
+        else if( window.msgRxLastCmd == NXTY_NAK_RSP )
+        {   
+            if( nxtyLastNakType == NXTY_NAK_TYPE_CRC )
+            {
+                // CRC error
+                showAlert("CRC error.", "Msg Error");
+            }
+            else if( nxtyLastNakType == NXTY_NAK_TYPE_UNII_NOT_UP )
+            {
+                // Unii not up
+                showAlert("Fix UNII link and retry...", "UNII link down.");
+            }
+            else if( nxtyLastNakType == NXTY_NAK_TYPE_UNIT_REDIRECT )
+            {
+                // Unii up but UART redirect error
+                showAlert("Redirect to NU failed.", "UNII link up.");
+            }
+            else if( nxtyLastNakType == NXTY_NAK_TYPE_TIMEOUT )
+            {
+                // Command timeout...
+                showAlert("Timeout.  Make sure USB cable is not plugged in.", "Msg Error");                    
+            } 
+            else
+            {
+                showAlert("Unknown NAK error.  NAK=" + nxtyLastNakType, "Msg Error");
+            }
+        }
+        else
+        {
+            showAlert("Unknown error.  Make sure USB cable is not plugged in.", "Msg Error");
+        }
+        
+    },
+
+
+
+
 	renderHomeView: function() 
 	{
 		var myBluetoothIcon = isBluetoothCnx ? "<div id='bt_icon_id' class='bt_icon'>" + szBtIconOn + "</div>" : "<div  id='bt_icon_id' class='bt_icon'>" + szBtIconOff + "</div>";
@@ -601,8 +692,9 @@ var app = {
 			"<img src='img/header_main.png' width='100%' />" +
 			
    			myBluetoothIcon +
-  			"<button id='reg_button_id' type='button' class='mybutton' onclick='app.handleRegKey()'><img src='img/button_Register.png' /> </button>" +
-  			szMyStatusLine;
+  			"<button id='reg_button_id'  type='button' class='mybutton' onclick='app.handleRegKey()'><img src='img/button_Register.png' /> </button>" +
+            "<button id='lock_button_id' type='button' class='mybutton' onclick='app.handleLockKey()'><img src='img/button_ClearLocationLock.png' /> </button>" +
+            szMyStatusLine;
   			
 
 		$('body').html(myHtml); 

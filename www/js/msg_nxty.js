@@ -42,7 +42,7 @@ const   NXTY_CONTROL_WRITE_RSP            = 0x4C;
 
 const     NXTY_PCCTRL_UART_REDIRECT       = 0xF0000024;
 const     NXTY_PCCTRL_GLOBALFLAGS         = 0xF0000038;
-
+const     NXTY_PCCTRL_CELLIDTIME          = 0xF000002C;
 
 
 const   NXTY_NAK_RSP                      = 0xBB;
