@@ -576,6 +576,11 @@ var app = {
                 // Unii up but UART redirect error
                 showAlert("Redirect to NU failed.", "UNII link up.");
             }
+            else if( nxtyLastNakType == NXTY_NAK_TYPE_TIMEOUT )
+            {
+                // Command timeout...
+                showAlert("Timeout.  Make sure USB cable is not plugged in.", "Msg Error");                    
+            } 
             else
             {
                 showAlert("Unknown NAK error.  NAK=" + nxtyLastNakType, "Msg Error");

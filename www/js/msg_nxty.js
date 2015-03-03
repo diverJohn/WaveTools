@@ -50,7 +50,7 @@ const     NXTY_NAK_TYPE_CRC               = 0x01;
 const     NXTY_NAK_TYPE_UNCMD             = 0x02;
 const     NXTY_NAK_TYPE_UNII_NOT_UP       = 0x03;
 const     NXTY_NAK_TYPE_UNIT_REDIRECT     = 0x04;
-
+const     NXTY_NAK_TYPE_TIMEOUT           = 0x05;
 
 
 var	msgRxLastCmd      = NXTY_INIT;
