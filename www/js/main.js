@@ -531,7 +531,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            navigator.notification.activityStart( "Waiting for Response", "Command sent to NU to unregister..." );
+            navigator.notification.activityStart( "Unregister command sent to NU", "Waiting for Response" );
 	 	    msgTimer = setTimeout(app.handleRegKeyRespnose, 5000);
 	 	
 	 	}
