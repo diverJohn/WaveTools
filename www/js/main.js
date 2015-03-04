@@ -703,6 +703,10 @@ var app = {
 	    // Make the buttons change when touched...    
  		document.getElementById("reg_button_id").addEventListener('touchstart', HandleButtonDown );
  		document.getElementById("reg_button_id").addEventListener('touchend',   HandleButtonUp );
+
+        document.getElementById("lock_button_id").addEventListener('touchstart', HandleButtonDown );
+        document.getElementById("lock_button_id").addEventListener('touchend',   HandleButtonUp );
+
 		
 		uMainLoopCounter = 0;
 			
