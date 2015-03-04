@@ -87,28 +87,6 @@ function U8ToHexText(u8)
     }
 }
 
-// UpdateRegIcon....................................................................................
-function UpdateRegIcon(reg)
-{
-    if(reg == 1)
-    {
-//        if( isRegistered == false )
-        {
-            document.getElementById("reg_icon_id").innerHTML = szRegIconReg;     // reg_yes.png
-            $('body').css("background","white url('../www/img/hbackground_reg.png') no-repeat fixed center bottom");
-            isRegistered = true;
-        }
-    }
-    else
-    {
-//        if( isRegistered == true )
-        {
-            document.getElementById("reg_icon_id").innerHTML = szRegIconNotReg;    // reg_no.png   line across
-            $('body').css("background","white url('../www/img/hbackground.png') no-repeat fixed center bottom");
-            isRegistered = false;
-        }
-    }
-}
 
 // UpdateRegButton....................................................................................
 function UpdateRegButton(reg)

@@ -545,7 +545,7 @@ var nxty = {
 	        case NXTY_REGISTRATION_RSP:
 	        {
 	        	PrintLog(1,  "Msg: Registration Rsp" );
-	            UpdateRegIcon(u8RxBuff[2]);
+//	            UpdateRegIcon(u8RxBuff[2]);
 	            
 	            // Update our local status to show that we are registered so we don't have to send a SW request to the NU.
 	            if( u8RxBuff[2] )
