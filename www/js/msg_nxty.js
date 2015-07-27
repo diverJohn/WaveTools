@@ -558,7 +558,9 @@ var nxty = {
 	        case NXTY_STATUS_RSP:
 	        {
 	            nxtyRxStatusIcd = u8RxBuff[4];
-nxtyRxStatusIcd = 0x07;
+	            
+// jdo TEST nxtyRxStatusIcd = 0x07;
+
 	        	PrintLog(1,  "Msg: Status Rsp: ICD ver=0x" + nxtyRxStatusIcd.toString(16) );
 	        	
 	        	UpdateStatusLine( "Wavetools ver: " + szVersion + " ICD: 0x" + nxtyRxStatusIcd.toString(16) );
