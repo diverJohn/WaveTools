@@ -517,7 +517,7 @@ var app = {
             }
             else
             {
-                WriteAddrReq(NXTY_RESET_LOCAL_ADDR, 0xF1AC0001 );    
+                WriteAddrReq(NXTY_PCCTRL_GLOBALFLAGS, 0xF1AC0001 );    
             }
             
             // Start the spinner..
