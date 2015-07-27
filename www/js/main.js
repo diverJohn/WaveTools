@@ -714,7 +714,7 @@ var app = {
 //        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
 
           
-        nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
+//        nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
           
           
                
