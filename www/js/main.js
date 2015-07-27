@@ -305,7 +305,11 @@ function GetStatus()
 { 
     if(isSouthBoundIfCnx)
     {
-        nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
+        if( nxtyRxStatusIcd == null )
+        {
+            nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
+            setTimeout(GetStatus, 3000);    // Come back until it is not null...  
+        }
     }
     else
     {
