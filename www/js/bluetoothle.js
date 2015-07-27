@@ -441,6 +441,12 @@ function UpdateBluetoothIcon(cnx)
 			document.getElementById("bt_icon_id").innerHTML = szSbIfIconOn;
 		}
 		isSouthBoundIfCnx = true;
+		
+        if( nxtyRxStatusIcd == null )
+        {
+            nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
+        }
+		
 	}
 	else
 	{

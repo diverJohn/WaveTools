@@ -99,7 +99,7 @@ var uTxMsgNotReadyCnt                   = 0;
 // Status message response data...
 var isNxtyStatusCurrent     = false;
 var nxtyRxStatusHw          = null;
-var nxtyRxStatusIcd         = 0;
+var nxtyRxStatusIcd         = null;
 var nxtyRxRegLockStatus     = 0;
 var nxtyRxStatusBoardConfig = null;
 const V1_ICD                = 0x07;
