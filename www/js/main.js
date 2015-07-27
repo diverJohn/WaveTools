@@ -494,22 +494,30 @@ var app = {
 	 	    // Unregister...
 //            showAlert("Just sent command to unregister...", "Unregister.");
             
-            var u8Buff  = new Uint8Array(20);
-            u8Buff[0] = 0x81;                               // Redirect to NU on entry and exit...   
-            u8Buff[1] = (NXTY_PCCTRL_GLOBALFLAGS >> 24);    // Note that javascript converts var to INT32 for shift operations.
-            u8Buff[2] = (NXTY_PCCTRL_GLOBALFLAGS >> 16);
-            u8Buff[3] = (NXTY_PCCTRL_GLOBALFLAGS >> 8);
-            u8Buff[4] = NXTY_PCCTRL_GLOBALFLAGS;
-            u8Buff[5] = 0xF1;                    // Note that javascript converts var to INT32 for shift operations.
-            u8Buff[6] = 0xAC;
-            u8Buff[7] = 0x00;
-            u8Buff[8] = 0x01;
-            
-            nxty.SendNxtyMsg(NXTY_CONTROL_WRITE_REQ, u8Buff, 9);
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                
+                var u8Buff  = new Uint8Array(20);
+                u8Buff[0] = 0x81;                               // Redirect to NU on entry and exit...   
+                u8Buff[1] = (NXTY_PCCTRL_GLOBALFLAGS >> 24);    // Note that javascript converts var to INT32 for shift operations.
+                u8Buff[2] = (NXTY_PCCTRL_GLOBALFLAGS >> 16);
+                u8Buff[3] = (NXTY_PCCTRL_GLOBALFLAGS >> 8);
+                u8Buff[4] = NXTY_PCCTRL_GLOBALFLAGS;
+                u8Buff[5] = 0xF1;                    // Note that javascript converts var to INT32 for shift operations.
+                u8Buff[6] = 0xAC;
+                u8Buff[7] = 0x00;
+                u8Buff[8] = 0x01;
+                
+                nxty.SendNxtyMsg(NXTY_PCCTRL_GLOBALFLAGS, u8Buff, 9);
+            }
+            else
+            {
+                WriteAddrReq(NXTY_RESET_LOCAL_ADDR, 0xF1AC0001 );    
+            }
             
             // Start the spinner..
             bUniiUp = true;
-            navigator.notification.activityStart( "Unregister command sent to NU", "Waiting for Response" );
+            navigator.notification.activityStart( "Unregister command sent to NU.  Make sure USB cable is not plugged in.", "Waiting for Response" );
 	 	    msgTimer = setTimeout(app.handleRegKeyRespnose, 5000);
 	 	
 	 	}
@@ -533,11 +541,10 @@ var app = {
         // Stop the spinner...
         navigator.notification.activityStop();
         
-        if( window.msgRxLastCmd == NXTY_CONTROL_WRITE_RSP )
-        {   
-            showAlert("Unit should now be unregistered...", "Success");
-        }
-        else if( window.msgRxLastCmd == NXTY_NAK_RSP )
+        
+
+        
+        if( window.msgRxLastCmd == NXTY_NAK_RSP )
         {   
             if( nxtyLastNakType == NXTY_NAK_TYPE_CRC )
             {
@@ -566,7 +573,20 @@ var app = {
         }
         else
         {
-            showAlert("Unknown error.  Make sure USB cable is not plugged in.", "Msg Error");
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                if( window.msgRxLastCmd == NXTY_CONTROL_WRITE_RSP )
+                {   
+                    showAlert("Unit should now be unregistered...", "Success");
+                }
+            }
+            else
+            {
+                if( bWriteAddrRsp )
+                {
+                    showAlert("Unit should now be unregistered...", "Success");
+                }
+            }                        
         }
         
     },
@@ -693,6 +713,10 @@ var app = {
         // Start the handler to be called every second...
 //        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
 
+          
+        nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
+          
+          
                
         UpdateStatusLine( "Wavetools ver:  00.01.00");
                         
