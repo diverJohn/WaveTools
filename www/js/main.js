@@ -33,7 +33,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "00.02.00" );
+var szVersion               = "00.02.00";
 
 
 
