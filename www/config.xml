@@ -76,6 +76,7 @@
 -->
 
     <gap:plugin name="org.apache.cordova.dialogs" />
+    <gap:plugin name="org.apache.cordova.device" />                         <!-- jdo: Added to use "window.device.platform" -->
 
 
 
