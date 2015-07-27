@@ -5,9 +5,11 @@ var isRegistered = true;
 
 const   MAIN_LOOP_COUNTER_MAX   = 20;
 
+var szSbIfIconOn            = "<img src='img/southboundif_on.png' />";
+var szSbIfIconOff           = "<img src='img/southboundif_off.png' />";
 
-var szBtIconOn              = "<img src='img/bluetooth_on.png' />";
-var szBtIconOff             = "<img src='img/bluetooth_off.png' />";
+//var szBtIconOn              = "<img src='img/bluetooth_on.png' />";
+//var szBtIconOff             = "<img src='img/bluetooth_off.png' />";
 var szRegIconReg            = "<img src='img/reg_yes.png' />";
 var szRegIconNotReg         = "<img src='img/reg_no.png' />";                       // With bar
 var szMyStatusLine          = "<p id='status_line_id' class='status_line'></p>";
@@ -714,7 +716,7 @@ var app = {
 //        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
 
           
-//        nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
+        nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
           
           
                
