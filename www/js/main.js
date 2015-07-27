@@ -718,7 +718,7 @@ var app = {
           
           
                
-        UpdateStatusLine( "Wavetools ver:  00.01.00");
+        UpdateStatusLine( "Wavetools ver:  00.02.00");
                         
         currentView = "main";
 	},
