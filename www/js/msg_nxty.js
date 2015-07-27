@@ -304,6 +304,7 @@ var nxty = {
       // Check for specific V1 messages..
       if( (uCmdByte == NXTY_DOWNLOAD_START_REQ)         || 
           (uCmdByte == NXTY_DOWNLOAD_END_REQ)           || 
+          (uCmdByte == NXTY_CONTROL_WRITE_REQ)          ||
           (uCmdByte == NXTY_STATUS_REQ)                 ) 
       {
             if( (uLenByte + 3) <= NXTY_STD_MSG_SIZE )
