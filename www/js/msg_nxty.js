@@ -560,6 +560,8 @@ var nxty = {
 
 	        	PrintLog(1,  "Msg: Status Rsp: ICD ver=0x" + nxtyRxStatusIcd.toString(16) );
 	        	
+	        	UpdateStatusLine( "Wavetools ver: " + szVersion + " ICD: " + nxtyRxStatusIcd );
+	        	
 	        	break;
 	       	}
 	    

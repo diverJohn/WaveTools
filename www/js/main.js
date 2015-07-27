@@ -33,6 +33,9 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
+var szVersion               = "00.02.00" );
+
+
 
 // Determine which messages get sent to the console.  1 normal, 10 verbose.
 // Level  1: Flow and errors.
@@ -659,19 +662,72 @@ var app = {
         
         if( isSouthBoundIfCnx )
         {
-            // Write 0xDABADABA  to PcCtrl, CellIdTime
-            var u8Buff  = new Uint8Array(20);
-            u8Buff[0] = 0x81;                               // Redirect to NU on entry and exit...   
-            u8Buff[1] = (NXTY_PCCTRL_CELLIDTIME >> 24);    // Note that javascript converts var to INT32 for shift operations.
-            u8Buff[2] = (NXTY_PCCTRL_CELLIDTIME >> 16);
-            u8Buff[3] = (NXTY_PCCTRL_CELLIDTIME >> 8);
-            u8Buff[4] = NXTY_PCCTRL_CELLIDTIME;
-            u8Buff[5] = 0xDA;                    // Note that javascript converts var to INT32 for shift operations.
-            u8Buff[6] = 0xBA;
-            u8Buff[7] = 0xDA;
-            u8Buff[8] = 0xBA;
+        
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                // Write 0xDABADABA  to PcCtrl, CellIdTime
+                var u8Buff  = new Uint8Array(20);
+                u8Buff[0] = 0x81;                               // Redirect to NU on entry and exit...   
+                u8Buff[1] = (NXTY_PCCTRL_CELLIDTIME >> 24);    // Note that javascript converts var to INT32 for shift operations.
+                u8Buff[2] = (NXTY_PCCTRL_CELLIDTIME >> 16);
+                u8Buff[3] = (NXTY_PCCTRL_CELLIDTIME >> 8);
+                u8Buff[4] = NXTY_PCCTRL_CELLIDTIME;
+                u8Buff[5] = 0xDA;                    // Note that javascript converts var to INT32 for shift operations.
+                u8Buff[6] = 0xBA;
+                u8Buff[7] = 0xDA;
+                u8Buff[8] = 0xBA;
+                
+                nxty.SendNxtyMsg(NXTY_CONTROL_WRITE_REQ, u8Buff, 9);
+            }
+            else
+            {
+                var i             = 0;
+                var u8TempTxBuff  = new Uint8Array(50);
             
-            nxty.SendNxtyMsg(NXTY_CONTROL_WRITE_REQ, u8Buff, 9);
+                PrintLog(1,  "Super Msg Send: Clear Location Lock" );
+            
+                // Redirect the UART........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x01;                                   // Set to 1 to redirect to remote unit
+            
+            
+                // Clear Location Lock.................................................                
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_GLOBALFLAGS;
+                u8TempTxBuff[i++] = 0xDA;              
+                u8TempTxBuff[i++] = 0xBA;
+                u8TempTxBuff[i++] = 0xDA;
+                u8TempTxBuff[i++] = 0xBA;
+                
+                // Redirect the UART Local........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
+            
+                
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
+            }
+            
+            
+            
+            
             
             // Start the spinner..
             bUniiUp = true;
@@ -699,11 +755,9 @@ var app = {
         // Stop the spinner...
         navigator.notification.activityStop();
         
-        if( window.msgRxLastCmd == NXTY_CONTROL_WRITE_RSP )
-        {   
-            showAlert("Location Lock should now be cleared...", "Success");
-        }
-        else if( window.msgRxLastCmd == NXTY_NAK_RSP )
+        
+        
+        if( window.msgRxLastCmd == NXTY_NAK_RSP )
         {   
             if( nxtyLastNakType == NXTY_NAK_TYPE_CRC )
             {
@@ -732,7 +786,22 @@ var app = {
         }
         else
         {
-            showAlert("Unknown error.  Make sure USB cable is not plugged in.", "Msg Error");
+        
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                if( window.msgRxLastCmd == NXTY_CONTROL_WRITE_RSP )
+                {   
+                    showAlert("Location Lock should now be cleared...", "Success");
+                }
+            }
+            else
+            {
+                if( bNxtySuperMsgRsp )
+                {
+                    showAlert("Location Lock should now be cleared...", "Success");
+                }
+            }                        
+        
         }
         
     },
@@ -776,7 +845,7 @@ var app = {
         setTimeout(GetStatus, 1000);  
 
                
-        UpdateStatusLine( "Wavetools ver:  00.02.00");
+        UpdateStatusLine( "Wavetools ver: " + szVersion );
                         
         currentView = "main";
 	},
