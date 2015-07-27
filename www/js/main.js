@@ -5,8 +5,8 @@ var isRegistered = true;
 
 const   MAIN_LOOP_COUNTER_MAX   = 20;
 
-var szSbIfIconOn            = "<img src='img/southboundif_on.png' />";
-var szSbIfIconOff           = "<img src='img/southboundif_off.png' />";
+var szSbIfIconOn            = "<img src='img/bluetooth_on.png' />";
+var szSbIfIconOff           = "<img src='img/bluetooth_off.png' />";
 
 //var szBtIconOn              = "<img src='img/bluetooth_on.png' />";
 //var szBtIconOff             = "<img src='img/bluetooth_off.png' />";
@@ -686,7 +686,7 @@ var app = {
 
 	renderHomeView: function() 
 	{
-		var myBluetoothIcon = isSouthBoundIfCnx ? "<div id='bt_icon_id' class='bt_icon'>" + szBtIconOn + "</div>" : "<div  id='bt_icon_id' class='bt_icon'>" + szBtIconOff + "</div>";
+		var myBluetoothIcon = isSouthBoundIfCnx ? "<div id='bt_icon_id' class='bt_icon'>" + szSbIfIconOn + "</div>" : "<div  id='bt_icon_id' class='bt_icon'>" + szSbIfIconOff + "</div>";
 		
 		var myHtml = 
 			"<img src='img/header_main.png' width='100%' />" +
