@@ -301,7 +301,18 @@ function SendCloudPoll()
     }
 }
 
-
+function GetStatus()
+{ 
+    if(isSouthBoundIfCnx)
+    {
+        nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
+    }
+    else
+    {
+        // Try again in one second...
+        setTimeout(GetStatus, 1000);  
+    }
+}
 
 
 // Geolocation Callbacks
@@ -718,9 +729,10 @@ var app = {
         // Start the handler to be called every second...
 //        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
 
-          
-          
-          
+
+        // Get the status in 1 second          
+        setTimeout(GetStatus, 1000);  
+
                
         UpdateStatusLine( "Wavetools ver:  00.02.00");
                         

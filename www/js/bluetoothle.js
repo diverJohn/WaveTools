@@ -442,10 +442,6 @@ function UpdateBluetoothIcon(cnx)
 		}
 		isSouthBoundIfCnx = true;
 		
-        if( nxtyRxStatusIcd == null )
-        {
-            nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
-        }
 		
 	}
 	else
