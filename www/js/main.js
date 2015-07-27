@@ -7,6 +7,9 @@ const   MAIN_LOOP_COUNTER_MAX   = 20;
 
 var szSbIfIconOn            = "<img src='img/bluetooth_on.png' />";
 var szSbIfIconOff           = "<img src='img/bluetooth_off.png' />";
+var iOSPlatform             = "iOS";
+var androidPlatform         = "Android";
+
 
 //var szBtIconOn              = "<img src='img/bluetooth_on.png' />";
 //var szBtIconOff             = "<img src='img/bluetooth_off.png' />";
