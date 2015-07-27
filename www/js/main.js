@@ -489,7 +489,7 @@ var app = {
 	{
 	 	PrintLog(1, "Un register key pressed");
 	 	
-	 	if( isBluetoothCnx )
+	 	if( isSouthBoundIfCnx )
 	 	{
 	 	    // Unregister...
 //            showAlert("Just sent command to unregister...", "Unregister.");
@@ -599,7 +599,7 @@ var app = {
     {
         PrintLog(1, "Clear Location Lock key pressed");
         
-        if( isBluetoothCnx )
+        if( isSouthBoundIfCnx )
         {
             // Write 0xDABADABA  to PcCtrl, CellIdTime
             var u8Buff  = new Uint8Array(20);
@@ -684,7 +684,7 @@ var app = {
 
 	renderHomeView: function() 
 	{
-		var myBluetoothIcon = isBluetoothCnx ? "<div id='bt_icon_id' class='bt_icon'>" + szBtIconOn + "</div>" : "<div  id='bt_icon_id' class='bt_icon'>" + szBtIconOff + "</div>";
+		var myBluetoothIcon = isSouthBoundIfCnx ? "<div id='bt_icon_id' class='bt_icon'>" + szBtIconOn + "</div>" : "<div  id='bt_icon_id' class='bt_icon'>" + szBtIconOff + "</div>";
 		
 		var myHtml = 
 			"<img src='img/header_main.png' width='100%' />" +
