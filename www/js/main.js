@@ -532,12 +532,53 @@ var app = {
             }
             else
             {
-                WriteAddrReq(NXTY_PCCTRL_GLOBALFLAGS, 0xF1AC0001 );    
+                var i             = 0;
+                var u8TempTxBuff  = new Uint8Array(50);
+            
+                PrintLog(1,  "Super Msg Send: Un Register" );
+            
+                // Redirect the UART........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x01;                                   // Set to 1 to redirect to remote unit
+            
+            
+                // Unregister.................................................                
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_GLOBALFLAGS;
+                u8TempTxBuff[i++] = 0xF1;              
+                u8TempTxBuff[i++] = 0xAC;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x01;
+                
+                // Redirect the UART Local........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
+            
+                
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
             }
             
             // Start the spinner..
             bUniiUp = true;
-            navigator.notification.activityStart( "Unregister command sent to NU.  Make sure USB cable is not plugged in.", "Waiting for Response" );
+            navigator.notification.activityStart( "Unregister command sent to NU.", "Waiting for Response" );
 	 	    msgTimer = setTimeout(app.handleRegKeyRespnose, 5000);
 	 	
 	 	}
@@ -560,9 +601,6 @@ var app = {
     {
         // Stop the spinner...
         navigator.notification.activityStop();
-        
-        
-
         
         if( window.msgRxLastCmd == NXTY_NAK_RSP )
         {   
@@ -602,7 +640,7 @@ var app = {
             }
             else
             {
-                if( bWriteAddrRsp )
+                if( bNxtySuperMsgRsp )
                 {
                     showAlert("Unit should now be unregistered...", "Success");
                 }
