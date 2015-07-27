@@ -524,7 +524,7 @@ var app = {
                 u8Buff[7] = 0x00;
                 u8Buff[8] = 0x01;
                 
-                nxty.SendNxtyMsg(NXTY_PCCTRL_GLOBALFLAGS, u8Buff, 9);
+                nxty.SendNxtyMsg(NXTY_CONTROL_WRITE_REQ, u8Buff, 9);
             }
             else
             {

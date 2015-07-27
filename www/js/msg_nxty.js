@@ -34,6 +34,9 @@ const   NXTY_DOWNLOAD_END_REQ             = 0x0A;
 const   NXTY_DOWNLOAD_END_RSP             = 0x4A;
 const   NXTY_STATUS_REQ                   = 0x0B;
 const   NXTY_STATUS_RSP                   = 0x4B;
+const   NXTY_CONTROL_WRITE_REQ            = 0x0C;
+const   NXTY_CONTROL_WRITE_RSP            = 0x4C;
+
 
 // Version 2.0 protocol additions...
 const   NXTY_READ_ADDRESS_REQ                   = 0x10;
@@ -559,6 +562,14 @@ var nxty = {
 	        	
 	        	break;
 	       	}
+	    
+	    
+            case NXTY_CONTROL_WRITE_RSP:
+            {
+               PrintLog(1,  "Msg: Control Write Rsp: Value=0x" + U8ToHexText(u8RxBuff[2]) + U8ToHexText(u8RxBuff[3]) + U8ToHexText(u8RxBuff[4]) + U8ToHexText(u8RxBuff[5]) );
+               
+               break;
+            }
 	    
 	    	case NXTY_SET_BLUETOOTH_CNX_STATUS_RSP:
 	    	{   
