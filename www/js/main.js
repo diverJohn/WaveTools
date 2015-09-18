@@ -33,7 +33,8 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "00.02.00";
+var szVersion               = "00.02.01";
+var szSuccess               = "";
 
 
 
@@ -114,195 +115,6 @@ function UpdateRegButton(reg)
 
 
 
-// SendCloudAsset............................................................................................
-function SendCloudAsset()
-{
-    if( isNxtyStatusCurrent && isNxtySnCurrent && isNetworkConnected )
-    {
-        myModel = "MN" + nxtyRxStatusBuildConfig;
-//        myModel = "LNTModel";
-
-        var myAsset    = "{'id': {'mn':'" + myModel + "', 'sn':'" + mySn + "', 'tn': '0' }, 'pingRate': 3600 }";
-        var myAssetUrl = myPlatformUrl + "assets/1";
-        
-        PrintLog( 1, "SendCloudAsset: " + myAssetUrl + "  " + myAsset );
-        
-        
-        $.ajax({
-            type       : "POST",
-            url        : myAssetUrl,
-            contentType: "application/json;charset=utf-8",
-            data       : myAsset,
-            dataType   : 'json',    // response format
-            success    : function(response) 
-                        {
-                            PrintLog( 1, "Response success: SendCloudAsset()..." + JSON.stringify(response) );
-                            if( response != null )
-                            {
-                                ProcessEgressResponse(response);
-                            }
-                        },
-            error      : function(response) 
-                        {
-                            PrintLog( 99, "Response error: SendCloudAsset()..." + JSON.stringify(response) );
-                        }
-        });
-        
-        
-    }
-    else
-    {
-        if(  isNetworkConnected == false )
-        {
-            PrintLog( 99, "SendCloudAsset: No network connection (WiFi or Cell)." );
-        }
-        else
-        {
-            PrintLog( 99, "SendCloudAsset: Model and SN not available yet" );
-        }
-    }
-}
-
-// SendCloudData............................................................................................
-function SendCloudData(dataText)
-{
-    if( (myModel != null) && (mySn != null) && isNetworkConnected )
-    {
-        var myData    = "{'data':[{'di': {" + dataText + "}}]}";
-        var myDataUrl = myPlatformUrl + "data/1/" + myModel + "!" + mySn;
-        
-        PrintLog( 1, "SendCloudData: " + myDataUrl + "  " + myData );
-        
-        
-        $.ajax({
-            type       : "POST",
-            url        : myDataUrl,
-            contentType: "application/json;charset=utf-8",
-            data       : myData,
-            dataType   : 'json',    // response format
-            success    : function(response) 
-                        {
-                            PrintLog( 1, "Response success: SendCloudData()..." + JSON.stringify(response)  );
-                            if( response != null )
-                            {
-                                ProcessEgressResponse(response);
-                            }
-                        },
-            error      : function(response) 
-                        {
-                            PrintLog( 99, "Response error: SendCloudData()..." + JSON.stringify(response) );
-                        }
-        });
-
-
-        
-    }
-    else
-    {
-        if(  isNetworkConnected == false )
-        {
-            PrintLog( 99, "SendCloudAsset: No network connection (WiFi or Cell)." );
-        }
-        else
-        {
-            PrintLog( 99, "SendCloudAsset: Model and SN not available yet" );
-        }
-    }
-    
-}
-
-// SendCloudLocation............................................................................................
-function SendCloudLocation(lat, long)
-{
-    if( (myModel != null) && (mySn != null) && isNetworkConnected )
-    {
-        var myData    = "{'locations':[{'latitude':" + lat + ", 'longitude':" + long + "}]}";
-        var myDataUrl = myPlatformUrl + "data/1/" + myModel + "!" + mySn;
-        
-        PrintLog( 1, "SendCloudLocation: " + myDataUrl + "  " + myData );
-        
-        
-        $.ajax({
-            type       : "POST",
-            url        : myDataUrl,
-            contentType: "application/json;charset=utf-8",
-            data       : myData,
-            dataType   : 'json',    // response format
-            success    : function(response) 
-                        {
-                            PrintLog( 1, "Response success: SendCloudLocation()..." + JSON.stringify(response) );
-                            if( response != null )
-                            {
-                                ProcessEgressResponse(response);
-                            }
-                        },
-            error      : function(response) 
-                        {
-                            PrintLog( 99, "Response error: SendCloudLocation()..." + JSON.stringify(response) );
-                        }
-        });
-        
-        
-    }
-    else
-    {
-        if(  isNetworkConnected == false )
-        {
-            PrintLog( 99, "SendCloudAsset: No network connection (WiFi or Cell)." );
-        }
-        else
-        {
-            PrintLog( 99, "SendCloudAsset: Model and SN not available yet" );
-        }
-    }
-
-    
-}
-
-// SendCloudPoll............................................................................................
-function SendCloudPoll()
-{
-    if( isNxtyStatusCurrent && isNxtySnCurrent && isNetworkConnected )
-    {
-        var myAssetUrl = myPlatformUrl + "assets/1/" + myModel + "!" + mySn;
-        
-        PrintLog( 1, "SendCloudPoll: " + myAssetUrl );
-        
-        
-        $.ajax({
-            type       : "POST",
-            url        : myAssetUrl,
-//            contentType: "application/json;charset=utf-8",
-//            data       : myAsset,
-            dataType   : 'json',    // response format
-            success    : function(response) 
-                        {
-                            PrintLog( 1, "Response success: SendCloudPoll()..." + JSON.stringify(response) );
-                            if( response != null )
-                            {
-                                ProcessEgressResponse(response);
-                            }
-                        },
-            error      : function(response) 
-                        {
-                            PrintLog( 99, "Response error: SendCloudPoll()..." + JSON.stringify(response) );
-                        }
-        });
-        
-        
-    }
-    else
-    {
-        if(  isNetworkConnected == false )
-        {
-            PrintLog( 99, "SendCloudAsset: No network connection (WiFi or Cell)." );
-        }
-        else
-        {
-            PrintLog( 99, "SendCloudAsset: Model and SN not available yet" );
-        }
-    }
-}
 
 function GetStatus()
 { 
@@ -322,106 +134,7 @@ function GetStatus()
 }
 
 
-// Geolocation Callbacks
-// HandleConfirmLocation.......................................................................................
-// process the confirmation dialog result
-function HandleConfirmLocation(buttonIndex) 
-{
-    // buttonIndex = 0 if dialog dismissed, i.e. back button pressed.
-    // buttonIndex = 1 if 'Yes' to use location information.
-    // buttonIndex = 2 if 'No'
-    if( buttonIndex == 1 )
-    {
-        // Request location...
-        navigator.geolocation.getCurrentPosition(geoSuccess, geoError, {timeout:10000});
 
-    }
-}
-
-
-
-// This method accepts a Position object, which contains the
-// current GPS coordinates
-//
-function geoSuccess(position) 
-{
-    SendCloudLocation( position.coords.latitude, position.coords.longitude );
-/*    
-    alert('Latitude: '          + position.coords.latitude          + '\n' +
-          'Longitude: '         + position.coords.longitude         + '\n' +
-          'Altitude: '          + position.coords.altitude          + '\n' +
-          'Accuracy: '          + position.coords.accuracy          + '\n' +
-          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-          'Heading: '           + position.coords.heading           + '\n' +
-          'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n');
-*/          
-}
-
-// geoError Callback receives a PositionError object
-//
-function geoError(error) 
-{
-    // Send in the default...
-    SendCloudLocation( myLat, myLong );
-/* 
-silent...
-
-    alert('code: '    + error.code    + '\n' +
-          'message: ' + error.message + '\n');
-*/          
-}
-
-
-// HandlePrivacyConfirmation.......................................................................................
-function HandlePrivacyConfirmation(buttonIndex) 
-{
-    // buttonIndex = 0 if dialog dismissed, i.e. back button pressed.
-    // buttonIndex = 1 if 'Ok'
-    if( buttonIndex == 1 )
-    {
-        // Ok...
-        bPrivacyViewed = true;
-        
-// jdo:  Save to non-vol after first hit.
-                
-    }
-}
-
-// HandleUniiRetry.......................................................................................
-// process the confirmation dialog result
-function HandleUniiRetry(buttonIndex) 
-{
-    // buttonIndex = 0 if dialog dismissed, i.e. back button pressed.
-    // buttonIndex = 1 if 'Retry' try again.
-    // buttonIndex = 2 if 'End'
-    if( buttonIndex == 1 )
-    {
-        // Retry...
-        navigator.notification.activityStart( "Please wait", "Retrying..." );
-        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
-        nxtySwVerNuCf          = null;
-        bUniiUp                = true;
-    }
-}
-
-// HandleCloudRetry.......................................................................................
-// process the confirmation dialog result
-function HandleCloudRetry(buttonIndex) 
-{
-    // buttonIndex = 0 if dialog dismissed, i.e. back button pressed.
-    // buttonIndex = 1 if 'Retry' try again.
-    // buttonIndex = 2 if 'End'
-    if( buttonIndex == 1 )
-    {
-        // Retry...
-        navigator.notification.activityStart( "Please wait", "Retrying..." );
-        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 );
-                    
-        // See if we have a network connection, i.e. WiFi or Cell.
-        isNetworkConnected = (navigator.connection.type == Connection.NONE)?false:true;         
-    }
-}
 
 function showAlert(message, title) 
 {
@@ -481,22 +194,6 @@ var app = {
             DisconnectBluetoothDevice();
             navigator.app.exitApp();
         }
-        else if( currentView == "registration" )
-        {
-            reg.handleBackKey();
-        }
-        else if( currentView == "tech" )
-        {
-            tech.handleBackKey();
-        }
-        else if( currentView == "settings" )
-        {
-            Stg.handleBackKey();
-        }
-        else if( currentView == "download" )
-        {
-            Dld.handleBackKey();
-        }
         else
         {
             showAlert("Back to where?", "Back...");
@@ -508,25 +205,105 @@ var app = {
 
 
 	// Handle the Register key
+	// Global Flags: 0xF0000038 = 0xF1AC0100
 	handleRegKey: function()
 	{
-	 	PrintLog(1, "Un register key pressed");
+	 	PrintLog(1, "Register key pressed");
 	 	
 	 	if( isSouthBoundIfCnx )
 	 	{
-	 	    // Unregister...
-//            showAlert("Just sent command to unregister...", "Unregister.");
-            
             if( nxtyRxStatusIcd <= 0x07 )
             {
-                
                 var u8Buff  = new Uint8Array(20);
                 u8Buff[0] = 0x81;                               // Redirect to NU on entry and exit...   
                 u8Buff[1] = (NXTY_PCCTRL_GLOBALFLAGS >> 24);    // Note that javascript converts var to INT32 for shift operations.
                 u8Buff[2] = (NXTY_PCCTRL_GLOBALFLAGS >> 16);
                 u8Buff[3] = (NXTY_PCCTRL_GLOBALFLAGS >> 8);
                 u8Buff[4] = NXTY_PCCTRL_GLOBALFLAGS;
-                u8Buff[5] = 0xF1;                    // Note that javascript converts var to INT32 for shift operations.
+                u8Buff[5] = 0xF1;                    
+                u8Buff[6] = 0xAC;
+                u8Buff[7] = 0x01;
+                u8Buff[8] = 0x00;
+                
+                nxty.SendNxtyMsg(NXTY_CONTROL_WRITE_REQ, u8Buff, 9);
+            }
+            else
+            {
+                var i             = 0;
+                var u8TempTxBuff  = new Uint8Array(50);
+            
+                PrintLog(1,  "Super Msg Send: Register" );
+            
+                // Redirect the UART........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x01;                                   // Set to 1 to redirect to remote unit
+            
+            
+                // Unregister.................................................                
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_GLOBALFLAGS;
+                u8TempTxBuff[i++] = 0xF1;              
+                u8TempTxBuff[i++] = 0xAC;
+                u8TempTxBuff[i++] = 0x01;
+                u8TempTxBuff[i++] = 0x00;
+                
+                // Redirect the UART Local........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
+            
+                
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
+            }
+            
+            // Start the spinner..
+            bUniiUp = true;
+            navigator.notification.activityStart( "Register command sent to NU.", "Waiting for Response" );
+            szSuccess = "Unit should now be registered...";
+	 	    msgTimer = setTimeout(app.handleRespnose, 5000);
+	 	
+	 	}
+	 	else
+	 	{
+            showAlert("Register not allowed...", "Bluetooth not connected.");
+	 	}
+	},
+
+	
+    // Handle the Un Register key
+    // Global Flags: 0xF0000038 = 0xF1AC0001    
+    handleUnRegKey: function()
+    {
+        PrintLog(1, "Un register key pressed");
+        
+        if( isSouthBoundIfCnx )
+        {
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                var u8Buff  = new Uint8Array(20);
+                u8Buff[0] = 0x81;                               // Redirect to NU on entry and exit...   
+                u8Buff[1] = (NXTY_PCCTRL_GLOBALFLAGS >> 24);
+                u8Buff[2] = (NXTY_PCCTRL_GLOBALFLAGS >> 16);
+                u8Buff[3] = (NXTY_PCCTRL_GLOBALFLAGS >> 8);
+                u8Buff[4] = NXTY_PCCTRL_GLOBALFLAGS;
+                u8Buff[5] = 0xF1;                   
                 u8Buff[6] = 0xAC;
                 u8Buff[7] = 0x00;
                 u8Buff[8] = 0x01;
@@ -582,87 +359,111 @@ var app = {
             // Start the spinner..
             bUniiUp = true;
             navigator.notification.activityStart( "Unregister command sent to NU.", "Waiting for Response" );
-	 	    msgTimer = setTimeout(app.handleRegKeyRespnose, 5000);
-	 	
-	 	}
-	 	else
-	 	{
-            if( ImRunningOnBrowser )
-            {
-//                reg.renderRegView();
-            }
-            else
-            {
-                showAlert("Un-Register not allowed...", "Bluetooth not connected.");
-            }
-	 	}
-	},
-	
-	
-    // Handle the Register key response
-    handleRegKeyRespnose: function()
-    {
-        // Stop the spinner...
-        navigator.notification.activityStop();
+            szSuccess = "Unit should now be unregistered...";
+            msgTimer = setTimeout(app.handleRespnose, 5000);
         
-        if( window.msgRxLastCmd == NXTY_NAK_RSP )
-        {   
-            if( nxtyLastNakType == NXTY_NAK_TYPE_CRC )
-            {
-                // CRC error
-                showAlert("CRC error.", "Msg Error");
-            }
-            else if( nxtyLastNakType == NXTY_NAK_TYPE_UNII_NOT_UP )
-            {
-                // Unii not up
-                showAlert("Fix UNII link and retry...", "UNII link down.");
-            }
-            else if( nxtyLastNakType == NXTY_NAK_TYPE_UNIT_REDIRECT )
-            {
-                // Unii up but UART redirect error
-                showAlert("Redirect to NU failed.", "UNII link up.");
-            }
-            else if( nxtyLastNakType == NXTY_NAK_TYPE_TIMEOUT )
-            {
-                // Command timeout...
-                showAlert("Timeout.  Make sure USB cable is not plugged in.", "Msg Error");                    
-            } 
-            else
-            {
-                showAlert("Unknown NAK error.  NAK=" + nxtyLastNakType, "Msg Error");
-            }
         }
         else
         {
-            if( nxtyRxStatusIcd <= 0x07 )
-            {
-                if( window.msgRxLastCmd == NXTY_CONTROL_WRITE_RSP )
-                {   
-                    showAlert("Unit should now be unregistered...", "Success");
-                }
-            }
-            else
-            {
-                if( bNxtySuperMsgRsp )
-                {
-                    showAlert("Unit should now be unregistered...", "Success");
-                }
-            }                        
+            showAlert("Un-Register not allowed...", "Bluetooth not connected.");
         }
-        
     },
 
 
 
 
-    // Handle the Register key
-    handleLockKey: function()
+    // Handle the Quick Lock key
+    // FUNCTION reg:  0xF0000000 = 0x00010000
+    handleQLockKey: function()
+    {
+        PrintLog(1, "Quick Location Lock key pressed");
+        
+        if( isSouthBoundIfCnx )
+        {
+            if( nxtyRxStatusIcd <= 0x07 )
+            {
+                // Write 0x00010000  to PcCtrl, Function
+                var u8Buff  = new Uint8Array(20);
+                u8Buff[0] = 0x81;                               // Redirect to NU on entry and exit...   
+                u8Buff[1] = (NXTY_PCCTRL_FUNCTION >> 24);    
+                u8Buff[2] = (NXTY_PCCTRL_FUNCTION >> 16);
+                u8Buff[3] = (NXTY_PCCTRL_FUNCTION >> 8);
+                u8Buff[4] = NXTY_PCCTRL_FUNCTION;
+                u8Buff[5] = 0x00;                    
+                u8Buff[6] = 0x01;
+                u8Buff[7] = 0x00;
+                u8Buff[8] = 0x00;
+                
+                nxty.SendNxtyMsg(NXTY_CONTROL_WRITE_REQ, u8Buff, 9);
+            }
+            else
+            {
+                var i             = 0;
+                var u8TempTxBuff  = new Uint8Array(50);
+            
+                PrintLog(1,  "Super Msg Send: Set Quick Location Lock" );
+            
+                // Redirect the UART........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x01;                                   // Set to 1 to redirect to remote unit
+            
+            
+                // Clear Location Lock.................................................                
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_FUNCTION >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_FUNCTION >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_FUNCTION >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_FUNCTION;
+                u8TempTxBuff[i++] = 0x00;              
+                u8TempTxBuff[i++] = 0x01;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                
+                // Redirect the UART Local........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
+            
+                
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
+            }
+            
+            // Start the spinner..
+            bUniiUp = true;
+            navigator.notification.activityStart( "Quick Location Lock command sent to NU", "Waiting for Response" );
+            szSuccess = "Quick Location Lock should now be set...";
+            msgTimer = setTimeout(app.handleRespnose, 5000);
+        
+        }
+        else
+        {
+            showAlert("Quick Location Lock not allowed...", "Bluetooth not connected.");
+        }
+    },
+
+
+    // Handle the Clear Lock key
+    // CellIdTime: 0xF000002C = 0xDABADABA
+    handleCLockKey: function()
     {
         PrintLog(1, "Clear Location Lock key pressed");
         
         if( isSouthBoundIfCnx )
         {
-        
             if( nxtyRxStatusIcd <= 0x07 )
             {
                 // Write 0xDABADABA  to PcCtrl, CellIdTime
@@ -700,10 +501,10 @@ var app = {
             
                 // Clear Location Lock.................................................                
                 u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
-                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 24);  
-                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 16);
-                u8TempTxBuff[i++] = (NXTY_PCCTRL_GLOBALFLAGS >> 8);
-                u8TempTxBuff[i++] = NXTY_PCCTRL_GLOBALFLAGS;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_CELLIDTIME >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_CELLIDTIME >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_CELLIDTIME >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_CELLIDTIME;
                 u8TempTxBuff[i++] = 0xDA;              
                 u8TempTxBuff[i++] = 0xBA;
                 u8TempTxBuff[i++] = 0xDA;
@@ -725,37 +526,109 @@ var app = {
                 nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
             }
             
-            
-            
-            
-            
             // Start the spinner..
             bUniiUp = true;
             navigator.notification.activityStart( "Clear Location Lock command sent to NU", "Waiting for Response" );
-            msgTimer = setTimeout(app.handleLockKeyRespnose, 5000);
+            szSuccess = "Location Lock should now be cleared...";
+            msgTimer = setTimeout(app.handleRespnose, 5000);
         
         }
         else
         {
-            if( ImRunningOnBrowser )
+            showAlert("Clear Location Lock not allowed...", "Bluetooth not connected.");
+        }
+    },
+
+
+
+    // Handle the Bypass CAC key
+    // CacFrameTimer: 0xF0000090 = 0x00000001
+    handleBypassCacKey: function()
+    {
+        PrintLog(1, "Bypass CAC key pressed");
+        
+        if( isSouthBoundIfCnx )
+        {
+            if( nxtyRxStatusIcd <= 0x07 )
             {
-//                reg.renderRegView();
+                var u8Buff  = new Uint8Array(20);
+                u8Buff[0] = 0x81;                               // Redirect to NU on entry and exit...   
+                u8Buff[1] = (NXTY_PCCTRL_CAC_FRAME_TIMER >> 24);    // Note that javascript converts var to INT32 for shift operations.
+                u8Buff[2] = (NXTY_PCCTRL_CAC_FRAME_TIMER >> 16);
+                u8Buff[3] = (NXTY_PCCTRL_CAC_FRAME_TIMER >> 8);
+                u8Buff[4] = NXTY_PCCTRL_CAC_FRAME_TIMER;
+                u8Buff[5] = 0x00;                    // Note that javascript converts var to INT32 for shift operations.
+                u8Buff[6] = 0x00;
+                u8Buff[7] = 0x00;
+                u8Buff[8] = 0x01;
+                
+                nxty.SendNxtyMsg(NXTY_CONTROL_WRITE_REQ, u8Buff, 9);
             }
             else
             {
-                showAlert("Clear Location Lock not allowed...", "Bluetooth not connected.");
+                var i             = 0;
+                var u8TempTxBuff  = new Uint8Array(50);
+            
+                PrintLog(1,  "Super Msg Send: Bypass CAC to NU" );
+            
+                // Redirect the UART........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x01;                                   // Set to 1 to redirect to remote unit
+            
+            
+                // Clear Location Lock.................................................                
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_CAC_FRAME_TIMER >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_CAC_FRAME_TIMER >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_CAC_FRAME_TIMER >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_CAC_FRAME_TIMER;
+                u8TempTxBuff[i++] = 0x00;              
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x01;
+                
+                // Redirect the UART Local........................................
+                u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 24);  
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 16);
+                u8TempTxBuff[i++] = (NXTY_PCCTRL_UART_REDIRECT >> 8);
+                u8TempTxBuff[i++] = NXTY_PCCTRL_UART_REDIRECT;
+                u8TempTxBuff[i++] = 0x00;                               
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;
+                u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
+            
+                
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
             }
+            
+            // Start the spinner..
+            bUniiUp = true;
+            navigator.notification.activityStart( "Bypass CAC command sent to NU", "Waiting for Response" );
+            szSuccess = "Bypass CAC should now be set...";
+            msgTimer = setTimeout(app.handleRespnose, 5000);
+        
+        }
+        else
+        {
+            showAlert("Bypass CAC not allowed...", "Bluetooth not connected.");
         }
     },
-    
-    
+
+	
     // Handle the Register key response
-    handleLockKeyRespnose: function()
+    handleRespnose: function()
     {
         // Stop the spinner...
         navigator.notification.activityStop();
-        
-        
         
         if( window.msgRxLastCmd == NXTY_NAK_RSP )
         {   
@@ -786,26 +659,29 @@ var app = {
         }
         else
         {
-        
             if( nxtyRxStatusIcd <= 0x07 )
             {
                 if( window.msgRxLastCmd == NXTY_CONTROL_WRITE_RSP )
                 {   
-                    showAlert("Location Lock should now be cleared...", "Success");
+                    showAlert(szSuccess, "Success");
                 }
             }
             else
             {
                 if( bNxtySuperMsgRsp )
                 {
-                    showAlert("Location Lock should now be cleared...", "Success");
+                    showAlert(szSuccess, "Success");
                 }
             }                        
-        
         }
         
     },
 
+
+
+
+    
+    
 
 
 
@@ -817,8 +693,11 @@ var app = {
 			"<img src='img/header_main.png' width='100%' />" +
 			
    			myBluetoothIcon +
-  			"<button id='reg_button_id'  type='button' class='mybutton' onclick='app.handleRegKey()'><img src='img/button_Register.png' /> </button>" +
-            "<button id='lock_button_id' type='button' class='mybutton' onclick='app.handleLockKey()'><img src='img/button_ClearLocationLock.png' /> </button>" +
+  			"<button id='reg_button_id'         type='button' class='mybutton' onclick='app.handleRegKey()'>       <img src='img/button_Register.png' />          </button>" +
+            "<button id='unreg_button_id'       type='button' class='mybutton' onclick='app.handleUnRegKey()'>     <img src='img/button_UnRegister.png' />        </button>" +
+            "<button id='quick_lock_button_id'  type='button' class='mybutton' onclick='app.handleQLockKey()'>     <img src='img/button_QuickLocationLock.png' /> </button>" +
+            "<button id='clear_lock_button_id'  type='button' class='mybutton' onclick='app.handleCLockKey()'>     <img src='img/button_ClearLocationLock.png' /> </button>" +
+            "<button id='bypass_cac_button_id'  type='button' class='mybutton' onclick='app.handleBypassCacKey()'> <img src='img/button_BypassCac.png' />         </button>" +
             szMyStatusLine;
   			
 
@@ -829,9 +708,17 @@ var app = {
  		document.getElementById("reg_button_id").addEventListener('touchstart', HandleButtonDown );
  		document.getElementById("reg_button_id").addEventListener('touchend',   HandleButtonUp );
 
-        document.getElementById("lock_button_id").addEventListener('touchstart', HandleButtonDown );
-        document.getElementById("lock_button_id").addEventListener('touchend',   HandleButtonUp );
+        document.getElementById("unreg_button_id").addEventListener('touchstart', HandleButtonDown );
+        document.getElementById("unreg_button_id").addEventListener('touchend',   HandleButtonUp );
 
+        document.getElementById("quick_lock_button_id").addEventListener('touchstart', HandleButtonDown );
+        document.getElementById("quick_lock_button_id").addEventListener('touchend',   HandleButtonUp );
+
+        document.getElementById("clear_lock_button_id").addEventListener('touchstart', HandleButtonDown );
+        document.getElementById("clear_lock_button_id").addEventListener('touchend',   HandleButtonUp );
+
+        document.getElementById("bypass_cac_button_id").addEventListener('touchstart', HandleButtonDown );
+        document.getElementById("bypass_cac_button_id").addEventListener('touchend',   HandleButtonUp );
 		
 		uMainLoopCounter = 0;
 			
