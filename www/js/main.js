@@ -78,7 +78,7 @@ function HandleButtonDown()
 // HandleButtonUp............................................................................................
 function HandleButtonUp()
 {
-	$(this).css("opacity","0.5");
+	$(this).css("opacity","0.75");
 	$(this).css("outline", "none" );       // Used to remove orange box for android 4+
 }
 
