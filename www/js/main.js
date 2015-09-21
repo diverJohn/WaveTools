@@ -364,7 +364,7 @@ var app = {
             bUniiUp = true;
             navigator.notification.activityStart( "Unregister command sent to NU.", "Waiting for Response" );
             szSuccess = "Unit should now be unregistered...";
-            msgTimer = setTimeout(app.handleRespnose, 5000);
+            msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleUnRegKey;
         
         }
@@ -451,7 +451,7 @@ var app = {
             bUniiUp = true;
             navigator.notification.activityStart( "Quick Location Lock command sent to NU", "Waiting for Response" );
             szSuccess = "Quick Location Lock should now be set...";
-            msgTimer = setTimeout(app.handleRespnose, 5000);
+            msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleQLockKey;
         
         }
@@ -536,7 +536,7 @@ var app = {
             bUniiUp = true;
             navigator.notification.activityStart( "Clear Location Lock command sent to NU", "Waiting for Response" );
             szSuccess = "Location Lock should now be cleared...";
-            msgTimer = setTimeout(app.handleRespnose, 5000);
+            msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleCLockKey;
         
         }
@@ -621,7 +621,7 @@ var app = {
             bUniiUp = true;
             navigator.notification.activityStart( "Bypass CAC command sent to NU", "Waiting for Response" );
             szSuccess = "Bypass CAC should now be set...";
-            msgTimer = setTimeout(app.handleRespnose, 5000);
+            msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleBypassCacKey;
         
         }
@@ -635,8 +635,6 @@ var app = {
     // Handle the Register key response
     handleRespnose: function()
     {
-        // Stop the spinner...
-        navigator.notification.activityStop();
         
         if( window.msgRxLastCmd == NXTY_NAK_RSP )
         {   
@@ -669,6 +667,9 @@ var app = {
         {
             if( nxtyRxStatusIcd <= 0x07 )
             {
+                // Stop the spinner...
+                navigator.notification.activityStop();
+                
                 if( window.msgRxLastCmd == NXTY_CONTROL_WRITE_RSP )
                 {   
                     showAlert(szSuccess, "Success");
@@ -678,6 +679,9 @@ var app = {
             {
                 if( bNxtySuperMsgRsp )
                 {
+                    // Stop the spinner...
+                    navigator.notification.activityStop();
+                    
                     showAlert(szSuccess, "Success");
                     retryCount == 0;
                 }
@@ -687,11 +691,14 @@ var app = {
                     
                     if( retryCount < 3 )
                     {
-                        showAlert("V2 Super Message did not receive a successful response, retrying...", "Retrying");
+//                        showAlert("V2 Super Message did not receive a successful response, retrying...", "Retrying");
                         retryObject();
                     }
                     else
                     {
+                        // Stop the spinner...
+                        navigator.notification.activityStop();
+                        
                         showAlert("V2 Super Message did not receive a successful response, no more retries...", "Failure");
                         retryCount == 0;
                     }

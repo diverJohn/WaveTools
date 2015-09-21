@@ -1290,34 +1290,6 @@ var nxty = {
                         }
                     }
                 }
-                else if( nxtyCurrentReq == NXTY_SUPER_MSG_SET_RESET_ARES )
-                {
-                    //                   Write 0xBEDA221E to 0xF0000040     Read 0xF8100000             
-                    // Tx: ae xx xx 13   11 f0 0 0 40 BE DA 22 1E           10 f8 10 00 00            
-                    // Rx  ae xx xx 53   51 1                               50 00 00 00 00                              
-                    //     [0]           [4]                                [6]                                     
-                    
-
-                    if( (u8RxBuff[4]  == NXTY_NAK_RSP) || (u8RxBuff[6]  == NXTY_NAK_RSP) ) 
-                    {
-                        // Got a NAK...
-                        iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_FAIL_NAK;
-                        PrintLog(99,  "Super Msg: Reset Ares msg type encountered a NAK." );
-                    }
-                    else
-                    {
-                        // Make sure that all of the writes were successfull...
-                        if( (u8RxBuff[5] == 1) ) 
-                        {
-                            iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_SUCCESS;
-                        }
-                        else
-                        {
-                            iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_FAIL_WRITE;
-                            PrintLog(99,  "Super Msg: Reset Ares msg type encountered write fail." );
-                        }
-                    }
-                }
                 else if( nxtyCurrentReq == NXTY_SUPER_MSG_SET_NU_PARAM )
                 {
                 
