@@ -240,7 +240,15 @@ var app = {
 	// Global Flags: 0xF0000038 = 0xF1AC0100
 	handleRegKey: function()
 	{
-	 	PrintLog(1, "Register key pressed");
+        if( retryObject == null )
+        {	
+            PrintLog(1, "");
+            PrintLog(1, "Register key pressed--------------------------------------");
+	 	}
+	 	else
+	 	{
+            PrintLog(1, "Register key retry--------------------------------------");
+	 	}
 	 	
 	 	if( isSouthBoundIfCnx )
 	 	{
@@ -325,7 +333,15 @@ var app = {
     // Global Flags: 0xF0000038 = 0xF1AC0001    
     handleUnRegKey: function()
     {
-        PrintLog(1, "Un register key pressed");
+        if( retryObject == null )
+        {   
+            PrintLog(1, "");
+            PrintLog(1, "Un Register key pressed--------------------------------------");
+        }
+        else
+        {
+            PrintLog(1, "Un Register key retry--------------------------------------");
+        }
         
         if( isSouthBoundIfCnx )
         {
@@ -411,7 +427,15 @@ var app = {
     // FUNCTION reg:  0xF0000000 = 0x00010000
     handleQLockKey: function()
     {
-        PrintLog(1, "Quick Location Lock key pressed");
+        if( retryObject == null )
+        {   
+            PrintLog(1, "");
+            PrintLog(1, "Quick Location Lock key pressed--------------------------------------");
+        }
+        else
+        {
+            PrintLog(1, "Quick Location Lock key retry--------------------------------------");
+        }
         
         if( isSouthBoundIfCnx )
         {
@@ -496,7 +520,15 @@ var app = {
     // CellIdTime: 0xF000002C = 0xDABADABA
     handleCLockKey: function()
     {
-        PrintLog(1, "Clear Location Lock key pressed");
+        if( retryObject == null )
+        {   
+            PrintLog(1, "");
+            PrintLog(1, "Clear Location Lock key pressed--------------------------------------");
+        }
+        else
+        {
+            PrintLog(1, "Clear Location Lock key retry--------------------------------------");
+        }
         
         if( isSouthBoundIfCnx )
         {
@@ -582,7 +614,15 @@ var app = {
     // CacFrameTimer: 0xF0000090 = 0x00000001
     handleBypassCacKey: function()
     {
-        PrintLog(1, "Bypass CAC key pressed");
+        if( retryObject == null )
+        {   
+            PrintLog(1, "");
+            PrintLog(1, "Bypass CAC key pressed--------------------------------------");
+        }
+        else
+        {
+            PrintLog(1, "Bypass CAC key retry--------------------------------------");
+        }
         
         if( isSouthBoundIfCnx )
         {
@@ -668,6 +708,8 @@ var app = {
         
         if( window.msgRxLastCmd == NXTY_NAK_RSP )
         {   
+            retryCount = 0;
+            
             if( nxtyLastNakType == NXTY_NAK_TYPE_CRC )
             {
                 // CRC error
@@ -722,7 +764,8 @@ var app = {
                     if( retryCount < 3 )
                     {
 //                        showAlert("V2 Super Message did not receive a successful response, retrying...", "Retrying");
-                        retryObject();
+                        PrintLog(1, "Retrying..." );
+                        setTimeout(retryObject, 1000);
                     }
                     else
                     {
@@ -736,6 +779,10 @@ var app = {
             }                        
         }
         
+        if( retryCount == 0 )
+        {
+            retryObject = null;
+        }
     },
 
 
