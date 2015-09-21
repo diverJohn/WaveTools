@@ -1304,7 +1304,7 @@ var nxty = {
                     {
                         // Got a NAK...
                         iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_FAIL_NAK;
-                        PrintLog(99,  "Super Msg: Set Ant State msg type encountered a NAK." );
+                        PrintLog(99,  "Super Msg: Set NU Param msg type encountered a NAK." );
                     }
                     else
                     {

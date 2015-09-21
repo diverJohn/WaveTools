@@ -178,6 +178,10 @@ function GetStatus()
             nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
             setTimeout(GetStatus, 3000);    // Come back until it is not null...  
         }
+        else
+        {
+            SpinnerStop();
+        }
     }
     else
     {
@@ -859,14 +863,14 @@ var app = {
 		
 		uMainLoopCounter = 0;
 			
-			
-        			
-        // Start the handler to be called every second...
-//        MainLoopIntervalHandle = setInterval(app.mainLoop, 1000 ); 
+        SpinnerStart( "", "Get current status..." );
+
+        // Start with UART local...allow 1 sec for BT to get connected...
+        setTimeout(SetUartLocal, 1000);
 
 
-        // Get the status in 1 second          
-        setTimeout(GetStatus, 1000);  
+        // Get the status in 2 seconds          
+        setTimeout(GetStatus, 2000);  
 
                
         UpdateStatusLine( "Wavetools ver: " + szVersion );
