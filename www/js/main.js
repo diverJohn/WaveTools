@@ -749,7 +749,7 @@ var app = {
             }
             else
             {
-                if( bNxtySuperMsgRsp )
+                if( iNxtySuperMsgRspStatus == NXTY_SUPER_MSG_STATUS_SUCCESS )
                 {
                     // Stop the spinner...
                     navigator.notification.activityStop();
