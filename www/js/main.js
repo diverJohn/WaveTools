@@ -672,6 +672,10 @@ var app = {
                 {
                     showAlert(szSuccess, "Success");
                 }
+                else
+                {
+                    showAlert("V2 Super Message did not receive a response.", "Success");
+                }
             }                        
         }
         
