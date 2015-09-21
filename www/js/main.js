@@ -186,9 +186,14 @@ var app = {
     //
     onDeviceReady: function() {
     
-        OpenFileSystem();
+        if( window.device.platform != iOSPlatform )
+        {
+            // IOS did not like opening the file system this early, no error just stalled.
+            OpenFileSystem();
     
-    	PrintLog(10,  "device ready" );
+            PrintLog(10,  "device ready:  Running on phone version: " + window.device.version + " parseFloat:" + parseFloat(window.device.version) );
+        }
+    
     	
     	isNxtyStatusCurrent = false;
     	isNxtySnCurrent     = false;

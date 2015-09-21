@@ -52,8 +52,12 @@
 
     <!-- Core plugins -->
     <gap:plugin name="org.apache.cordova.network-information" />            <!-- jdo: android: added for network connection information -->
-    <gap:plugin name="org.apache.cordova.file" />                           <!-- jdo: android: added for file management  -->
-    <gap:plugin name="org.apache.cordova.file-transfer" />       
+    <gap:plugin name="org.apache.cordova.file" />                           <!-- jdo: added for file management  -->
+    <gap:plugin name="org.apache.cordova.file-transfer" version="0.4.6" />  <!-- jdo: added to transfer files for download from the cloud. -->        
+    <gap:plugin name="org.apache.cordova.dialogs" />
+    <gap:plugin name="org.apache.cordova.device" />                         <!-- jdo: Added to use "window.device.platform" -->
+    <gap:plugin name="org.apache.cordova.statusbar" version="0.1.4" />      <!-- jdo: IOS 7 and above does not allow full screen.   Use plugin to control -->
+      
        
 <!--    
     <gap:plugin name="org.apache.cordova.battery-status" />
