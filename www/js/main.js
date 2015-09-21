@@ -233,20 +233,7 @@ var app = {
     	isNxtyStatusCurrent = false;
     	isNxtySnCurrent     = false;
     	
-        if( window.device.platform == iOSPlatform )
-        {
-            if (parseFloat(window.device.version) >= 7.0) 
-            {
-                StatusBar.hide();
-            }
-        } 
     	
-    	
-    	// Only start bluetooth if on a phone...
-    	if( window.isPhone )
-    	{
-            OpenSouthBoundIf();
-        }
         
 
 		// Register the event listener if the back button is pressed...
@@ -255,6 +242,22 @@ var app = {
         
         
         app.renderHomeView();
+        
+        
+        if( window.device.platform == iOSPlatform )
+        {
+            if (parseFloat(window.device.version) >= 7.0) 
+            {
+                StatusBar.hide();
+            }
+        } 
+        
+        
+        // Only start bluetooth if on a phone...
+        if( window.isPhone )
+        {
+            OpenSouthBoundIf();
+        }
     },   
        
        
