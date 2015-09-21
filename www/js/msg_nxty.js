@@ -55,6 +55,8 @@ const     NXTY_SUPER_MSG_REDIRECT_UART          = 0x04;
 const     NXTY_SUPER_MSG_CANCEL_REDIRECT_UART   = 0x05;
 const     NXTY_SUPER_MSG_SET_ANT_STATE          = 0x06;
 const     NXTY_SUPER_MSG_RESET_ARES             = 0x07;
+const     NXTY_SUPER_MSG_SET_NU_PARAM           = 0x0F;
+
 const   NXTY_SUPER_MSG_RSP                      = 0x53;
 const   NXTY_SUPER_MSG_PARAM_SEL_ARRAY    = ["0:Xfer Bufr",    "UniqueIdLsd",       "UniqueIdMsd",      "BuildId",         "SWVersion",         
                                              "BoardConfig",    "LinkState",         "FirstConfigDword", "SystemSnLsd",     "SystemSnMsd",
@@ -1313,6 +1315,37 @@ var nxty = {
                         {
                             iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_FAIL_WRITE;
                             PrintLog(99,  "Super Msg: Reset Ares msg type encountered write fail." );
+                        }
+                    }
+                }
+                else if( nxtyCurrentReq == NXTY_SUPER_MSG_SET_NU_PARAM )
+                {
+                
+                
+                    //                   Redirect UART         Write Something          Un redirect UART             
+                    // Tx: ae xx xx 13   11 f0 0 0 24 0 0 0 1  11 f0 0 0 20 0 0 0 10    11 f0 0 0 24 0 0 0 0            
+                    // Rx  ae xx xx 53   51 1                  51 1                     51 1                              
+                    //     [0]           [4]                   [6]                      [8]                                     
+                    
+
+                    if( (u8RxBuff[4]  == NXTY_NAK_RSP) || (u8RxBuff[6]  == NXTY_NAK_RSP) || (u8RxBuff[8]  == NXTY_NAK_RSP) ) 
+                    {
+                        // Got a NAK...
+                        iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_FAIL_NAK;
+                        PrintLog(99,  "Super Msg: Set Ant State msg type encountered a NAK." );
+                    }
+                    else
+                    {
+                        // Make sure that all of the writes were successfull...
+                        if( (u8RxBuff[5] == 1) && (u8RxBuff[7] == 1) && (u8RxBuff[9] == 1) ) 
+                        {
+                            iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_SUCCESS;
+                        }
+                        else
+                        {
+                            iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_FAIL_WRITE;
+                            PrintLog(99,  "Super Msg: Set NU Param encountered write fail." );
+                            
                         }
                     }
                 }

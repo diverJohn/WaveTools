@@ -35,6 +35,8 @@ var bPrivacyViewed          = false;
 var msgTimer                = null; 
 var szVersion               = "00.02.01";
 var szSuccess               = "";
+var retryObject             = null;
+var retryCount              = 0;
 
 
 
@@ -269,7 +271,7 @@ var app = {
                 u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
             
                 
-                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_NU_PARAM;
                 nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
             }
             
@@ -277,7 +279,9 @@ var app = {
             bUniiUp = true;
             navigator.notification.activityStart( "Register command sent to NU.", "Waiting for Response" );
             szSuccess = "Unit should now be registered...";
-	 	    msgTimer = setTimeout(app.handleRespnose, 5000);
+	 	    msgTimer = setTimeout(app.handleRespnose, 6000);
+            retryObject = app.handleRegKey;
+	 	    
 	 	
 	 	}
 	 	else
@@ -352,7 +356,7 @@ var app = {
                 u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
             
                 
-                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_NU_PARAM;
                 nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
             }
             
@@ -361,6 +365,7 @@ var app = {
             navigator.notification.activityStart( "Unregister command sent to NU.", "Waiting for Response" );
             szSuccess = "Unit should now be unregistered...";
             msgTimer = setTimeout(app.handleRespnose, 5000);
+            retryObject = app.handleUnRegKey;
         
         }
         else
@@ -438,7 +443,7 @@ var app = {
                 u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
             
                 
-                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_NU_PARAM;
                 nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
             }
             
@@ -447,6 +452,7 @@ var app = {
             navigator.notification.activityStart( "Quick Location Lock command sent to NU", "Waiting for Response" );
             szSuccess = "Quick Location Lock should now be set...";
             msgTimer = setTimeout(app.handleRespnose, 5000);
+            retryObject = app.handleQLockKey;
         
         }
         else
@@ -522,7 +528,7 @@ var app = {
                 u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
             
                 
-                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_NU_PARAM;
                 nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
             }
             
@@ -531,6 +537,7 @@ var app = {
             navigator.notification.activityStart( "Clear Location Lock command sent to NU", "Waiting for Response" );
             szSuccess = "Location Lock should now be cleared...";
             msgTimer = setTimeout(app.handleRespnose, 5000);
+            retryObject = app.handleCLockKey;
         
         }
         else
@@ -606,7 +613,7 @@ var app = {
                 u8TempTxBuff[i++] = 0x00;                                   // Set to 0 to go back local
             
                 
-                nxtyCurrentReq = NXTY_SUPER_MSG_SET_ANT_STATE;
+                nxtyCurrentReq = NXTY_SUPER_MSG_SET_NU_PARAM;
                 nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
             }
             
@@ -615,6 +622,7 @@ var app = {
             navigator.notification.activityStart( "Bypass CAC command sent to NU", "Waiting for Response" );
             szSuccess = "Bypass CAC should now be set...";
             msgTimer = setTimeout(app.handleRespnose, 5000);
+            retryObject = app.handleBypassCacKey;
         
         }
         else
@@ -671,10 +679,22 @@ var app = {
                 if( bNxtySuperMsgRsp )
                 {
                     showAlert(szSuccess, "Success");
+                    retryCount == 0;
                 }
                 else
                 {
-                    showAlert("V2 Super Message did not receive a response.", "Success");
+                    retryCount++;
+                    
+                    if( retryCount < 3 )
+                    {
+                        showAlert("V2 Super Message did not receive a successful response, retrying...", "Retrying");
+                        retryObject();
+                    }
+                    else
+                    {
+                        showAlert("V2 Super Message did not receive a successful response, no more retries...", "Failure");
+                        retryCount == 0;
+                    }
                 }
             }                        
         }
