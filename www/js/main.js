@@ -49,20 +49,42 @@ var retryCount              = 0;
 // Level 99: Error, print in red.
 var PrintLogLevel = 3;
 
+
 // PrintLog............................................................................................
 function PrintLog(level, txt)
 {
-    var d = new Date();
+    var d       = new Date();
+    var myMs    = d.getMilliseconds();
+    
+    
+    if( myMs < 10 )
+    {
+        myMs = "00" + myMs;
+    }
+    else if( myMs < 100 )
+    {
+        myMs = "0" + myMs;
+    }
+    
+    
     if( level == 99 )
     {
-        console.log("**** Error: (" + d.getSeconds() + "." + d.getMilliseconds() + ") " + txt);
+//        console.log("**** Error: (" + d.getSeconds() + "." + d.getMilliseconds() + ") " + txt);
+        var logText = "(" + d.getMinutes() + ":" + d.getSeconds() + "." + myMs + ") **** Error: " + txt;
+        console.log( logText );
+        WriteLogFile( logText );
+        
 //jdo        console.error(txt);            // console.error does not work on phonegap
     }
     else if( level <= PrintLogLevel )
     { 
-        console.log("(" + d.getSeconds() + "." + d.getMilliseconds() + ") " + txt);
+        var logText = "(" + d.getMinutes() + ":" + d.getSeconds() + "." + myMs + ") " + txt;
+        console.log( logText );
+        WriteLogFile( logText );
     }
+    
 }
+
 
 // UpdateStatusLine....................................................................................
 function UpdateStatusLine(statusText)
@@ -163,6 +185,9 @@ var app = {
   	// PhoneGap is now loaded and it is now safe to make calls using PhoneGap
     //
     onDeviceReady: function() {
+    
+        OpenFileSystem();
+    
     	PrintLog(10,  "device ready" );
     	
     	isNxtyStatusCurrent = false;
