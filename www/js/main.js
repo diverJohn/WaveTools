@@ -173,7 +173,7 @@ function GetStatus()
 { 
     if(isSouthBoundIfCnx)
     {
-        SpinnerStart( "", "Get current status..." );
+//        SpinnerStart( "", "Get current status..." );
     
         if( nxtyRxStatusIcd == null )
         {
@@ -370,7 +370,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            SpinnerStart( "", "Register command sent to NU.\nWaiting for Response" );
+            SpinnerStart( "", "Register command sent to NU." );
             szSuccess = "Unit should now be registered...";
 	 	    msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleRegKey;
@@ -471,7 +471,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            SpinnerStart( "", "Unregister command sent to NU.<br>Waiting for Response" );
+            SpinnerStart( "", "Unregister command sent to NU." );
             szSuccess = "Unit should now be unregistered...";
             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleUnRegKey;
@@ -574,7 +574,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            SpinnerStart( "", "Quick Location Lock command sent to NU.  Waiting for Response" );
+            SpinnerStart( "", "Quick Location Lock command sent to NU." );
             szSuccess = "Quick Location Lock should now be set...";
             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleQLockKey;
@@ -675,7 +675,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            SpinnerStart( "", "Clear Location Lock command sent to NU.  Waiting for Response" );
+            SpinnerStart( "", "Clear Location Lock command sent to NU." );
             szSuccess = "Location Lock should now be cleared...";
             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleCLockKey;
@@ -776,7 +776,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            SpinnerStart( "", "Bypass CAC command sent to NU.  Waiting for Response" );
+            SpinnerStart( "", "Bypass CAC command sent to NU." );
             szSuccess = "Bypass CAC should now be set...";
             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleBypassCacKey;
@@ -930,6 +930,9 @@ var app = {
         UpdateStatusLine( "Wavetools ver: " + szVersion );
                         
         currentView = "main";
+        
+        SpinnerStart( "", "Get current status..." );
+        
 	},
 
 
