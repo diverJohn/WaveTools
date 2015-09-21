@@ -89,6 +89,8 @@
     -->
 
 
+    <gap:plugin name="hu.dpal.phonegap.plugins.spinnerdialog" version="1.2.0" />        <!-- jdo: IOS does not allow the native spinner so add plugin -->
+
 
     <!-- Define app icon for each platform. -->
     

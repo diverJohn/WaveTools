@@ -37,6 +37,7 @@ var szVersion               = "00.02.02";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
+var bSpinner                = false;
 
 
 
@@ -83,6 +84,34 @@ function PrintLog(level, txt)
         WriteLogFile( logText );
     }
     
+}
+
+
+// SpinnerStart........................................................................................
+// Had to add a plugin for Spinners since IOS does not support navigator.notification.activityStart()
+function SpinnerStart(title, msg )
+{
+    SpinnerStop();
+    
+    // Note: spinner dialog is cancelable by default on Android and iOS. On WP8, it's fixed by default
+    // so make fixed on all platforms.
+    // Title is only allowed on Android so never show the title.
+    window.plugins.spinnerDialog.show(null, msg, true);
+    bSpinner = true;
+    
+    // Save to log file...
+    PrintLog(1, "Spinner: " + msg );
+    
+}
+
+// SpinnerStop........................................................................................
+function SpinnerStop()
+{
+    if( bSpinner )
+    {
+        window.plugins.spinnerDialog.hide();
+        bSpinner = false;
+    }
 }
 
 
@@ -315,7 +344,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            navigator.notification.activityStart( "Register command sent to NU.", "Waiting for Response" );
+            SpinnerStart( "", "Register command sent to NU. Waiting for Response" );
             szSuccess = "Unit should now be registered...";
 	 	    msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleRegKey;
@@ -408,7 +437,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            navigator.notification.activityStart( "Unregister command sent to NU.", "Waiting for Response" );
+            SpinnerStart( "", "Unregister command sent to NU.  Waiting for Response" );
             szSuccess = "Unit should now be unregistered...";
             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleUnRegKey;
@@ -503,7 +532,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            navigator.notification.activityStart( "Quick Location Lock command sent to NU", "Waiting for Response" );
+            SpinnerStart( "", "Quick Location Lock command sent to NU.  Waiting for Response" );
             szSuccess = "Quick Location Lock should now be set...";
             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleQLockKey;
@@ -596,7 +625,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            navigator.notification.activityStart( "Clear Location Lock command sent to NU", "Waiting for Response" );
+            SpinnerStart( "", "Clear Location Lock command sent to NU.  Waiting for Response" );
             szSuccess = "Location Lock should now be cleared...";
             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleCLockKey;
@@ -689,7 +718,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            navigator.notification.activityStart( "Bypass CAC command sent to NU", "Waiting for Response" );
+            SpinnerStart( "", "Bypass CAC command sent to NU.  Waiting for Response" );
             szSuccess = "Bypass CAC should now be set...";
             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleBypassCacKey;
@@ -740,7 +769,7 @@ var app = {
             if( nxtyRxStatusIcd <= 0x07 )
             {
                 // Stop the spinner...
-                navigator.notification.activityStop();
+                SpinnerStop();
                 
                 if( window.msgRxLastCmd == NXTY_CONTROL_WRITE_RSP )
                 {   
@@ -752,7 +781,7 @@ var app = {
                 if( iNxtySuperMsgRspStatus == NXTY_SUPER_MSG_STATUS_SUCCESS )
                 {
                     // Stop the spinner...
-                    navigator.notification.activityStop();
+                    SpinnerStop();
                     
                     showAlert(szSuccess, "Success");
                     retryCount = 0;
@@ -770,7 +799,7 @@ var app = {
                     else
                     {
                         // Stop the spinner...
-                        navigator.notification.activityStop();
+                        SpinnerStop();
                         
                         showAlert("V2 Super Message did not receive a successful response, no more retries...", "Failure");
                         retryCount = 0;
