@@ -365,6 +365,7 @@ var app = {
 	 	}
 	 	else
 	 	{
+            SpinnerStop();
             showAlert("Register not allowed...", "Bluetooth not connected.");
 	 	}
 	},
@@ -464,6 +465,7 @@ var app = {
         }
         else
         {
+            SpinnerStop();
             showAlert("Un-Register not allowed...", "Bluetooth not connected.");
         }
     },
@@ -566,6 +568,7 @@ var app = {
         }
         else
         {
+            SpinnerStop();
             showAlert("Quick Location Lock not allowed...", "Bluetooth not connected.");
         }
     },
@@ -666,6 +669,7 @@ var app = {
         }
         else
         {
+            SpinnerStop();
             showAlert("Clear Location Lock not allowed...", "Bluetooth not connected.");
         }
     },
@@ -766,6 +770,7 @@ var app = {
         }
         else
         {
+            SpinnerStop();
             showAlert("Bypass CAC not allowed...", "Bluetooth not connected.");
         }
     },
