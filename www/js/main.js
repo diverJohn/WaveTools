@@ -370,7 +370,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            SpinnerStart( "", "Register command sent to NU. Waiting for Response" );
+            SpinnerStart( "", "Register command sent to NU.\nWaiting for Response" );
             szSuccess = "Unit should now be registered...";
 	 	    msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleRegKey;
@@ -471,7 +471,7 @@ var app = {
             
             // Start the spinner..
             bUniiUp = true;
-            SpinnerStart( "", "Unregister command sent to NU.  Waiting for Response" );
+            SpinnerStart( "", "Unregister command sent to NU.<br>Waiting for Response" );
             szSuccess = "Unit should now be unregistered...";
             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleUnRegKey;
