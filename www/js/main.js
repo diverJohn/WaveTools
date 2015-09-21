@@ -755,13 +755,13 @@ var app = {
                     navigator.notification.activityStop();
                     
                     showAlert(szSuccess, "Success");
-                    retryCount == 0;
+                    retryCount = 0;
                 }
                 else
                 {
                     retryCount++;
                     
-                    if( retryCount < 3 )
+                    if( retryCount < 4 )
                     {
 //                        showAlert("V2 Super Message did not receive a successful response, retrying...", "Retrying");
                         PrintLog(1, "Retrying..." );
@@ -773,7 +773,7 @@ var app = {
                         navigator.notification.activityStop();
                         
                         showAlert("V2 Super Message did not receive a successful response, no more retries...", "Failure");
-                        retryCount == 0;
+                        retryCount = 0;
                     }
                 }
             }                        
