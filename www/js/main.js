@@ -38,7 +38,7 @@ var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
 var bSpinner                = false;
-
+var szNoStatus              = "No status response from unit so ICD version not known...kill app and retry";
 
 
 // Determine which messages get sent to the console.  1 normal, 10 verbose.
@@ -283,6 +283,14 @@ var app = {
             PrintLog(1, "Register key retry--------------------------------------");
 	 	}
 	 	
+	 	if( nxtyRxStatusIcd == null )
+        {
+            PrintLog(1, szNoStatus );
+            showAlert(szNoStatus, "No Status Response");
+            return;
+	 	}
+	 	
+	 	
 	 	if( isSouthBoundIfCnx )
 	 	{
             if( nxtyRxStatusIcd <= 0x07 )
@@ -374,6 +382,13 @@ var app = {
         else
         {
             PrintLog(1, "Un Register key retry--------------------------------------");
+        }
+
+        if( nxtyRxStatusIcd == null )
+        {
+            PrintLog(1, szNoStatus );
+            showAlert(szNoStatus, "No Status Response");
+            return;
         }
         
         if( isSouthBoundIfCnx )
@@ -469,6 +484,13 @@ var app = {
         {
             PrintLog(1, "Quick Location Lock key retry--------------------------------------");
         }
+
+        if( nxtyRxStatusIcd == null )
+        {
+            PrintLog(1, szNoStatus );
+            showAlert(szNoStatus, "No Status Response");
+            return;
+        }
         
         if( isSouthBoundIfCnx )
         {
@@ -561,6 +583,13 @@ var app = {
         else
         {
             PrintLog(1, "Clear Location Lock key retry--------------------------------------");
+        }
+
+        if( nxtyRxStatusIcd == null )
+        {
+            PrintLog(1, szNoStatus );
+            showAlert(szNoStatus, "No Status Response");
+            return;
         }
         
         if( isSouthBoundIfCnx )
@@ -655,6 +684,13 @@ var app = {
         else
         {
             PrintLog(1, "Bypass CAC key retry--------------------------------------");
+        }
+
+        if( nxtyRxStatusIcd == null )
+        {
+            PrintLog(1, szNoStatus );
+            showAlert(szNoStatus, "No Status Response");
+            return;
         }
         
         if( isSouthBoundIfCnx )
