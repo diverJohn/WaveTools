@@ -173,6 +173,8 @@ function GetStatus()
 { 
     if(isSouthBoundIfCnx)
     {
+        SpinnerStart( "", "Get current status..." );
+    
         if( nxtyRxStatusIcd == null )
         {
             nxty.SendNxtyMsg(NXTY_STATUS_REQ, null, 0);
@@ -231,6 +233,14 @@ var app = {
     	isNxtyStatusCurrent = false;
     	isNxtySnCurrent     = false;
     	
+        if( window.device.platform == iOSPlatform )
+        {
+            if (parseFloat(window.device.version) >= 7.0) 
+            {
+                StatusBar.hide();
+            }
+        } 
+    	
     	
     	// Only start bluetooth if on a phone...
     	if( window.isPhone )
@@ -241,6 +251,7 @@ var app = {
 
 		// Register the event listener if the back button is pressed...
         document.addEventListener("backbutton", app.onBackKeyDown, false);
+        
         
         
         app.renderHomeView();
@@ -904,7 +915,6 @@ var app = {
 		
 		uMainLoopCounter = 0;
 			
-        SpinnerStart( "", "Get current status..." );
 
         // Start with UART local...allow 1 sec for BT to get connected...
         setTimeout(SetUartLocal, 1000);
