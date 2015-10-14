@@ -16,6 +16,7 @@ var androidPlatform         = "Android";
 var szRegIconReg            = "<img src='img/reg_yes.png' />";
 var szRegIconNotReg         = "<img src='img/reg_no.png' />";                       // With bar
 var szMyStatusLine          = "<p id='status_line_id' class='status_line'></p>";
+var szMyRssiLine            = "<p id='rssi_line_id'   class='rssi_line'></p>";
 var myModel                 = "MN8";
 var mySn                    = "12345678";
 var myPlatformUrl           = "https://nextivity-sandbox-connect.axeda.com:443/ammp/";
@@ -119,6 +120,12 @@ function SpinnerStop()
 function UpdateStatusLine(statusText)
 {
 	document.getElementById("status_line_id").innerHTML = statusText;
+}
+
+// UpdateRssiLine....................................................................................
+function UpdateRssiLine(rssiVal)
+{
+    document.getElementById("rssi_line_id").innerHTML = "RSSI: " + rssiVal;
 }
 
 // HandleButtonDown............................................................................................
@@ -926,7 +933,8 @@ var app = {
         // Get the status in 2 seconds          
         setTimeout(GetStatus, 2000);  
 
-               
+              
+        UpdateRssiLine( -100 );               
         UpdateStatusLine( "Wavetools ver: " + szVersion );
                         
         currentView = "main";
