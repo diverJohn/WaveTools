@@ -199,9 +199,9 @@ td {background-color:#56A0D3; text-align: center; opacity: 0.85; border: 1px sol
 
 p.rssi_line {
     position: fixed;
-    bottom: 25px;
+    bottom: 35px;
     left: 10px;
-    font-size:18px;
+    font-size:20px;
 }
 
     

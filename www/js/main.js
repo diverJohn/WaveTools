@@ -987,8 +987,11 @@ var app = {
 
 function GetRssiPeriodically()
 {
-    GetBluetoothRssi();
-    setTimeout(GetRssiPeriodically, 1000);
+    if(isSouthBoundIfCnx)
+    {
+        GetBluetoothRssi();
+    }
+    setTimeout(GetRssiPeriodically, 250);
 }
 
 

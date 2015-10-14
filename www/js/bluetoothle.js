@@ -1071,7 +1071,7 @@ function rssiSuccess(obj)
 {   
     if (obj.status == "rssi")
     {
-        PrintLog(10, "BT: RSSI data received" + obj.rssi );
+//        PrintLog(10, "BT: RSSI data received" + obj.rssi );
         UpdateRssiLine( obj.rssi );  
     }
 }
