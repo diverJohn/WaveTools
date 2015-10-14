@@ -1058,6 +1058,28 @@ function SetMaxTxPhoneBuffers(numBuffers)
 
 
 
+// GetBluetoothRssi........................................................................
+function GetBluetoothRssi()
+{
+    var paramsObj = {"address":myLastBtAddress};
+    
+    bluetoothle.rssi(rssiSuccess, rssiError, paramsObj);
+}
+
+
+function rssiSuccess(obj)
+{   
+    if (obj.status == "rssi")
+    {
+        PrintLog(10, "BT: RSSI data received" + obj.rssi );
+        UpdateRssiLine( obj.rssi );  
+    }
+}
+
+function rssiError(msg)
+{
+    PrintLog(99, "BT: GetRssi error: " + msg.error + " - " + msg.message);
+}
 
 
 
