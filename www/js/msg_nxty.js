@@ -8,7 +8,7 @@
 
 const   NXTY_PHONE_ICD_VER                = 0x20;
 
-const   NXTY_STD_MSG_SIZE 				  = 0x0C;   // 12
+const   NXTY_STD_MSG_SIZE                   = 0x0C;   // 12
 const   NXTY_MED_MSG_SIZE                 = 0x84;   // 132
 const   NXTY_BIG_MSG_SIZE                 = 0xFF;   // 255
 const   NXTY_V2_MAX_MSG_SIZE              = 260;    // 260
@@ -94,12 +94,12 @@ const     NXTY_NAK_TYPE_USB_BUSY        = 0x07;
 
 
 
-var	msgRxLastCmd                        = NXTY_INIT;
+var    msgRxLastCmd                        = NXTY_INIT;
 var u8RxBuff                            = new Uint8Array(NXTY_V2_MAX_MSG_SIZE);       // Allow for max V1 msg of 255 bytes or V2 msg of 260 bytes.
 var u8UniqueId                          = new Uint8Array(8)
 var uSendCount                          = 0; 
 
-var uRxBuffIdx		                    = 0;
+var uRxBuffIdx                            = 0;
 var uTxMsgNotReadyCnt                   = 0;
 
 
@@ -420,20 +420,20 @@ var nxty = {
     ProcessNxtyRxMsg: function( pRxMsgData, uLenByte )
     {
         var i;
-        var	bOk       = false;
+        var    bOk       = false;
         var bV2Msg    = false;
         var uRxMsgLen = NXTY_BIG_MSG_SIZE;
         
-		
-		if( uRxBuffIdx == 0 )
-		{
-			if( !((pRxMsgData[0] == NXTY_STD_MSG_SIZE) || (pRxMsgData[0] == NXTY_MED_MSG_SIZE) || (pRxMsgData[0] == NXTY_BIG_MSG_SIZE) || (pRxMsgData[0] == NXTY_V2_PREFIX)) )
-			{
-				uRxBuffIdx = 0;
-				PrintLog(99,  "Msg: First byte should be 0x0C, 0x84, 0xFF or 0xAE:  1st byte = " + pRxMsgData[0].toString(16) + ", data tossed." );
-				return;
-			}
-		}
+        
+        if( uRxBuffIdx == 0 )
+        {
+            if( !((pRxMsgData[0] == NXTY_STD_MSG_SIZE) || (pRxMsgData[0] == NXTY_MED_MSG_SIZE) || (pRxMsgData[0] == NXTY_BIG_MSG_SIZE) || (pRxMsgData[0] == NXTY_V2_PREFIX)) )
+            {
+                uRxBuffIdx = 0;
+                PrintLog(99,  "Msg: First byte should be 0x0C, 0x84, 0xFF or 0xAE:  1st byte = " + pRxMsgData[0].toString(16) + ", data tossed." );
+                return;
+            }
+        }
 
         // Perform some sanity checks before copying incoming data to u8RxBuff.
         if( (uRxBuffIdx + uLenByte) > u8RxBuff.length ) 
@@ -442,20 +442,20 @@ var nxty = {
             PrintLog(99, "Msg: Rx buffer overflow, data tossed.");
             return;
         }
-		
+        
         
         // Copy over the incoming data...
         var outText = pRxMsgData[0].toString(16);
-		for( i = 0; i < uLenByte; i++ )
-		{
-			u8RxBuff[uRxBuffIdx] = pRxMsgData[i];
-			uRxBuffIdx = uRxBuffIdx + 1;
-			
-			if( i )
-			{
-				outText = outText + " " + pRxMsgData[i].toString(16);
-	        }
-		}
+        for( i = 0; i < uLenByte; i++ )
+        {
+            u8RxBuff[uRxBuffIdx] = pRxMsgData[i];
+            uRxBuffIdx = uRxBuffIdx + 1;
+            
+            if( i )
+            {
+                outText = outText + " " + pRxMsgData[i].toString(16);
+            }
+        }
 
 
         // Check for V1 message...
@@ -486,110 +486,110 @@ var nxty = {
 
         
 
-		// See if our buffer has a complete message...
-		if( uRxBuffIdx != uRxMsgLen )
-		{
+        // See if our buffer has a complete message...
+        if( uRxBuffIdx != uRxMsgLen )
+        {
             outText = outText + " [Cnt(" + uRxBuffIdx  + ") != len(" + uRxMsgLen + ") exit]";
-		    PrintLog(3,  "Msg Rx: " + outText );
-			return;
-		}
+            PrintLog(3,  "Msg Rx: " + outText );
+            return;
+        }
 
         outText = outText + " [Cnt(" + uRxBuffIdx  + ") == len(" + uRxMsgLen + ") process]";
         PrintLog(2,  "Msg Rx: " + outText );
 
 
-		// Process message................................
+        // Process message................................
         var uCrc     = new Uint8Array(1);
         var uCmd     = new Uint8Array(1);
   
-	      
-	    uCrc = 0;
-	    uCrc = nxty.CalcCrc8( u8RxBuff, uRxMsgLen-1, uCrc );
-	      
-	    if( u8RxBuff[uRxMsgLen-1] != uCrc )
-	    {
-	        PrintLog(99,  "Msg: Invalid CRC: expected: 0x" + u8RxBuff[uRxMsgLen-1].toString(16) + " calc: 0x" + uCrc.toString(16) );
-	        msgRxLastCmd      = NXTY_INIT; // Make sure we can send the next message.
-	        return;
-	    }
-	    
-	    if( bV2Msg == false )
-	    {
-	       uCmd = u8RxBuff[1];
-	    }
-	    else
-	    {
+          
+        uCrc = 0;
+        uCrc = nxty.CalcCrc8( u8RxBuff, uRxMsgLen-1, uCrc );
+          
+        if( u8RxBuff[uRxMsgLen-1] != uCrc )
+        {
+            PrintLog(99,  "Msg: Invalid CRC: expected: 0x" + u8RxBuff[uRxMsgLen-1].toString(16) + " calc: 0x" + uCrc.toString(16) );
+            msgRxLastCmd      = NXTY_INIT; // Make sure we can send the next message.
+            return;
+        }
+        
+        if( bV2Msg == false )
+        {
+           uCmd = u8RxBuff[1];
+        }
+        else
+        {
            uCmd = u8RxBuff[3];
-	    }
-	    msgRxLastCmd = uCmd;
-	    
-	    switch( uCmd )
-	    {
-	        
-	        
-	        
-	        
-	        
-	        case NXTY_DOWNLOAD_START_RSP:
-	        {
-	           PrintLog(1,  "Msg: Download Start Rsp" ); 
-	           
-	           // In javascript the shift operator, <<, works on 32-bit int.  Use the >>> to convert back to unsigned need for comparison.
-	           nxtySwDldStartRspAddr =   (u8RxBuff[2] << 24) |          
+        }
+        msgRxLastCmd = uCmd;
+        
+        switch( uCmd )
+        {
+            
+            
+            
+            
+            
+            case NXTY_DOWNLOAD_START_RSP:
+            {
+               PrintLog(1,  "Msg: Download Start Rsp" ); 
+               
+               // In javascript the shift operator, <<, works on 32-bit int.  Use the >>> to convert back to unsigned need for comparison.
+               nxtySwDldStartRspAddr =   (u8RxBuff[2] << 24) |          
                                          (u8RxBuff[3] << 16) |          
                                          (u8RxBuff[4] << 8)  |        
                                           u8RxBuff[5];
                                           
                // Use the triple right shift operator to convert from signed to unsigned.                           
                nxtySwDldStartRspAddr >>>= 0;                                     
-	           break;
-	        }
-	           
-	        case NXTY_DOWNLOAD_TRANSFER_RSP:
-	        {          
-	           // Only print this a level 2 since there are so many transfer responses.
-	           // Also the download loop will print % complete for each response.
-	           PrintLog(2,  "Msg: Download Transfer Rsp" );
-	           nxtySwDldXferRspCont =   u8RxBuff[2];         
-	           break;
-	        }
-	        
-	        case NXTY_DOWNLOAD_END_RSP:               PrintLog(1,  "Msg: Download End Rsp" );             break;
-	        
-	        
-	        
+               break;
+            }
+               
+            case NXTY_DOWNLOAD_TRANSFER_RSP:
+            {          
+               // Only print this a level 2 since there are so many transfer responses.
+               // Also the download loop will print % complete for each response.
+               PrintLog(2,  "Msg: Download Transfer Rsp" );
+               nxtySwDldXferRspCont =   u8RxBuff[2];         
+               break;
+            }
+            
+            case NXTY_DOWNLOAD_END_RSP:               PrintLog(1,  "Msg: Download End Rsp" );             break;
+            
+            
+            
             
         
-	        case NXTY_STATUS_RSP:
-	        {
-	            nxtyRxStatusIcd = u8RxBuff[4];
-	            
+            case NXTY_STATUS_RSP:
+            {
+                nxtyRxStatusIcd = u8RxBuff[4];
+                
 // jdo TEST nxtyRxStatusIcd = 0x07;
 
-	        	PrintLog(1,  "Msg: Status Rsp: ICD ver=0x" + nxtyRxStatusIcd.toString(16) );
-	        	
-	        	UpdateStatusLine( "Wavetools ver: " + szVersion + " ICD: 0x" + nxtyRxStatusIcd.toString(16) );
-	        	
-	        	break;
-	       	}
-	    
-	    
+                PrintLog(1,  "Msg: Status Rsp: ICD ver=0x" + nxtyRxStatusIcd.toString(16) );
+                
+                UpdateStatusLine( "Wavetools ver: " + szVersion + " ICD: 0x" + nxtyRxStatusIcd.toString(16) );
+                
+                break;
+               }
+        
+        
             case NXTY_CONTROL_WRITE_RSP:
             {
                PrintLog(1,  "Msg: Control Write Rsp: Value=0x" + U8ToHexText(u8RxBuff[2]) + U8ToHexText(u8RxBuff[3]) + U8ToHexText(u8RxBuff[4]) + U8ToHexText(u8RxBuff[5]) );
                
                break;
             }
-	    
-	    	case NXTY_SET_BLUETOOTH_CNX_STATUS_RSP:
-	    	{   
-	    	    PrintLog(1,  "Msg: Set Bluetooth Cnx Status Rsp" );
-	    	    
-	    	    // Do not count this command since this may have been initiated by the BT device. 
+        
+            case NXTY_SET_BLUETOOTH_CNX_STATUS_RSP:
+            {   
+                PrintLog(1,  "Msg: Set Bluetooth Cnx Status Rsp" );
+                
+                // Do not count this command since this may have been initiated by the BT device. 
 //                msgRxLastCmd = NXTY_WAITING_FOR_RSP;
-	    	    break;
-	    	}
-	        
+                break;
+            }
+            
 
 
 
@@ -1332,8 +1332,8 @@ var nxty = {
 
 
 
-	        
-	        case NXTY_NAK_RSP:
+            
+            case NXTY_NAK_RSP:
             {   
                 if( bV2Msg == false )
                 {
@@ -1403,20 +1403,20 @@ var nxty = {
                 break;
             }
             
-	        default:
-	        {
-	           PrintLog(99,  "Msg: Undefined command: " + uCmd.toString(16) );
-	           break;
-	        }
-	    }
+            default:
+            {
+               PrintLog(99,  "Msg: Undefined command: " + uCmd.toString(16) );
+               break;
+            }
+        }
 
         // Make sure that we can receive a new message...
         uRxBuffIdx = 0;
 
-	      
-	    return;
-	},
-	     
+          
+        return;
+    },
+         
      
      
      

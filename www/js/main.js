@@ -119,7 +119,7 @@ function SpinnerStop()
 // UpdateStatusLine....................................................................................
 function UpdateStatusLine(statusText)
 {
-	document.getElementById("status_line_id").innerHTML = statusText;
+    document.getElementById("status_line_id").innerHTML = statusText;
 }
 
 // UpdateRssiLine....................................................................................
@@ -131,15 +131,15 @@ function UpdateRssiLine(rssiVal)
 // HandleButtonDown............................................................................................
 function HandleButtonDown()
 {
-	// No transparency when pressed...
-	$(this).css("opacity","1.0");
+    // No transparency when pressed...
+    $(this).css("opacity","1.0");
 }
 
 // HandleButtonUp............................................................................................
 function HandleButtonUp()
 {
-	$(this).css("opacity","0.75");
-	$(this).css("outline", "none" );       // Used to remove orange box for android 4+
+    $(this).css("opacity","0.75");
+    $(this).css("outline", "none" );       // Used to remove orange box for android 4+
 }
 
 
@@ -237,7 +237,7 @@ var app = {
      
     // deviceready Event Handler
     //
-  	// PhoneGap is now loaded and it is now safe to make calls using PhoneGap
+      // PhoneGap is now loaded and it is now safe to make calls using PhoneGap
     //
     onDeviceReady: function() {
     
@@ -249,14 +249,14 @@ var app = {
             PrintLog(10,  "device ready:  Running on phone version: " + window.device.version + " parseFloat:" + parseFloat(window.device.version) );
         }
     
-    	
-    	isNxtyStatusCurrent = false;
-    	isNxtySnCurrent     = false;
-    	
-    	
+        
+        isNxtyStatusCurrent = false;
+        isNxtySnCurrent     = false;
+        
+        
         
 
-		// Register the event listener if the back button is pressed...
+        // Register the event listener if the back button is pressed...
         document.addEventListener("backbutton", app.onBackKeyDown, false);
         
         
@@ -303,30 +303,30 @@ var app = {
 
 
 
-	// Handle the Register key
-	// Global Flags: 0xF0000038 = 0xF1AC0100
-	handleRegKey: function()
-	{
+    // Handle the Register key
+    // Global Flags: 0xF0000038 = 0xF1AC0100
+    handleRegKey: function()
+    {
         if( retryObject == null )
-        {	
+        {    
             PrintLog(1, "");
             PrintLog(1, "Register key pressed--------------------------------------");
-	 	}
-	 	else
-	 	{
+         }
+         else
+         {
             PrintLog(1, "Register key retry--------------------------------------");
-	 	}
-	 	
-	 	if( nxtyRxStatusIcd == null )
+         }
+         
+         if( nxtyRxStatusIcd == null )
         {
             PrintLog(1, szNoStatus );
             showAlert(szNoStatus, "No Status Response");
             return;
-	 	}
-	 	
-	 	
-	 	if( isSouthBoundIfCnx )
-	 	{
+         }
+         
+         
+         if( isSouthBoundIfCnx )
+         {
             if( nxtyRxStatusIcd <= 0x07 )
             {
                 var u8Buff  = new Uint8Array(20);
@@ -392,19 +392,19 @@ var app = {
             bUniiUp = true;
             SpinnerStart( "", "Register command sent to NU." );
             szSuccess = "Unit should now be registered...";
-	 	    msgTimer = setTimeout(app.handleRespnose, 6000);
+             msgTimer = setTimeout(app.handleRespnose, 6000);
             retryObject = app.handleRegKey;
-	 	    
-	 	
-	 	}
-	 	else
-	 	{
+             
+         
+         }
+         else
+         {
             SpinnerStop();
             showAlert("Register not allowed...", "Bluetooth not connected.");
-	 	}
-	},
+         }
+    },
 
-	
+    
     // Handle the Un Register key
     // Global Flags: 0xF0000038 = 0xF1AC0001    
     handleUnRegKey: function()
@@ -809,7 +809,7 @@ var app = {
         }
     },
 
-	
+    
     // Handle the Register key response
     handleRespnose: function()
     {
@@ -901,16 +901,16 @@ var app = {
 
 
 
-	renderHomeView: function() 
-	{
-		var myBluetoothIcon = isSouthBoundIfCnx ? "<div id='bt_icon_id' class='bt_icon'>" + szSbIfIconOn + "</div>" : "<div  id='bt_icon_id' class='bt_icon'>" + szSbIfIconOff + "</div>";
-		
-		var myHtml = 
-			"<img src='img/header_main.png' width='100%' />" +
-			
-   			myBluetoothIcon +
-   			
-  			"<button id='reg_button_id'         type='button' class='mybutton' onclick='app.handleRegKey()'>       <img src='img/button_Register.png' />          </button>" +
+    renderHomeView: function() 
+    {
+        var myBluetoothIcon = isSouthBoundIfCnx ? "<div id='bt_icon_id' class='bt_icon'>" + szSbIfIconOn + "</div>" : "<div  id='bt_icon_id' class='bt_icon'>" + szSbIfIconOff + "</div>";
+        
+        var myHtml = 
+            "<img src='img/header_main.png' width='100%' />" +
+            
+               myBluetoothIcon +
+               
+              "<button id='reg_button_id'         type='button' class='mybutton' onclick='app.handleRegKey()'>       <img src='img/button_Register.png' />          </button>" +
             "<button id='unreg_button_id'       type='button' class='mybutton' onclick='app.handleUnRegKey()'>     <img src='img/button_UnRegister.png' />        </button>" +
             "<button id='quick_lock_button_id'  type='button' class='mybutton' onclick='app.handleQLockKey()'>     <img src='img/button_QuickLocationLock.png' /> </button>" +
             "<button id='clear_lock_button_id'  type='button' class='mybutton' onclick='app.handleCLockKey()'>     <img src='img/button_ClearLocationLock.png' /> </button>" +
@@ -918,14 +918,14 @@ var app = {
             
 //            szMyRssiLine +
             szMyStatusLine;
-  			
+              
 
-		$('body').html(myHtml); 
-		
+        $('body').html(myHtml); 
+        
 
-	    // Make the buttons change when touched...    
- 		document.getElementById("reg_button_id").addEventListener('touchstart', HandleButtonDown );
- 		document.getElementById("reg_button_id").addEventListener('touchend',   HandleButtonUp );
+        // Make the buttons change when touched...    
+         document.getElementById("reg_button_id").addEventListener('touchstart', HandleButtonDown );
+         document.getElementById("reg_button_id").addEventListener('touchend',   HandleButtonUp );
 
         document.getElementById("unreg_button_id").addEventListener('touchstart', HandleButtonDown );
         document.getElementById("unreg_button_id").addEventListener('touchend',   HandleButtonUp );
@@ -938,9 +938,9 @@ var app = {
 
         document.getElementById("bypass_cac_button_id").addEventListener('touchstart', HandleButtonDown );
         document.getElementById("bypass_cac_button_id").addEventListener('touchend',   HandleButtonUp );
-		
-		uMainLoopCounter = 0;
-			
+        
+        uMainLoopCounter = 0;
+            
 
 
 
@@ -957,38 +957,38 @@ var app = {
 //        UpdateRssiLine( -100 );               
 //        GetRssiPeriodically();
         
-	},
+    },
 
 
-	initialize: function() 
-	{
-		if( ImRunningOnBrowser )
-		{
-			PrintLog(10, "running on browser");
-	
-	
-	        // Browser...
-	        window.isPhone = false;
-	        isRegistered   = false;
-	        this.onDeviceReady();
-	    }
-	    else
-	    {
-		 	PrintLog(10, "running on phone");
-		 	
-	        // On a phone....
-	        window.isPhone = true;
-		 		        
-	        // Call onDeviceReady when PhoneGap is loaded.
-	        //
-	        // At this point, the document has loaded but phonegap-1.0.0.js has not.
-	        // When PhoneGap is loaded and talking with the native device,
-	        // it will call the event `deviceready`.
-	        // 
-	        document.addEventListener('deviceready', this.onDeviceReady, false);
+    initialize: function() 
+    {
+        if( ImRunningOnBrowser )
+        {
+            PrintLog(10, "running on browser");
+    
+    
+            // Browser...
+            window.isPhone = false;
+            isRegistered   = false;
+            this.onDeviceReady();
+        }
+        else
+        {
+             PrintLog(10, "running on phone");
+             
+            // On a phone....
+            window.isPhone = true;
+                         
+            // Call onDeviceReady when PhoneGap is loaded.
+            //
+            // At this point, the document has loaded but phonegap-1.0.0.js has not.
+            // When PhoneGap is loaded and talking with the native device,
+            // it will call the event `deviceready`.
+            // 
+            document.addEventListener('deviceready', this.onDeviceReady, false);
         }
 
-	},
+    },
 
 
 
@@ -1006,4 +1006,4 @@ function GetRssiPeriodically()
 
 
 
-	
+    
