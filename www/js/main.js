@@ -896,20 +896,20 @@ var app = {
 			"<img src='img/header_main.png' width='100%' />" +
 			
    			myBluetoothIcon +
-/*   			
+   			
   			"<button id='reg_button_id'         type='button' class='mybutton' onclick='app.handleRegKey()'>       <img src='img/button_Register.png' />          </button>" +
             "<button id='unreg_button_id'       type='button' class='mybutton' onclick='app.handleUnRegKey()'>     <img src='img/button_UnRegister.png' />        </button>" +
             "<button id='quick_lock_button_id'  type='button' class='mybutton' onclick='app.handleQLockKey()'>     <img src='img/button_QuickLocationLock.png' /> </button>" +
             "<button id='clear_lock_button_id'  type='button' class='mybutton' onclick='app.handleCLockKey()'>     <img src='img/button_ClearLocationLock.png' /> </button>" +
             "<button id='bypass_cac_button_id'  type='button' class='mybutton' onclick='app.handleBypassCacKey()'> <img src='img/button_BypassCac.png' />         </button>" +
-*/            
-            szMyRssiLine +
+            
+//            szMyRssiLine +
             szMyStatusLine;
   			
 
 		$('body').html(myHtml); 
 		
-/*
+
 	    // Make the buttons change when touched...    
  		document.getElementById("reg_button_id").addEventListener('touchstart', HandleButtonDown );
  		document.getElementById("reg_button_id").addEventListener('touchend',   HandleButtonUp );
@@ -942,10 +942,10 @@ var app = {
         currentView = "main";
         
         SpinnerStart( "", "Get current status..." );
-*/
+
         
-        UpdateRssiLine( -100 );               
-        GetRssiPeriodically();
+//        UpdateRssiLine( -100 );               
+//        GetRssiPeriodically();
         
 	},
 
