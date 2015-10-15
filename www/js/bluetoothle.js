@@ -347,6 +347,34 @@ function startScanSuccess(obj)
             } 
         }   
         
+        // See if we need to continue scanning to look for max RSSI, only if we have not connected before...
+        if( bDeviceFound && (myLastBtAddress == null) )
+        {
+            if( bMaxRssiScanning )
+            {
+                if( obj.rssi > maxRssi )
+                {
+                    maxRssi      = obj.rssi;
+                    maxRssiAddr  = obj.adress
+                    PrintLog(1, "BT: This Cel-Fi address: " + maxRssiAddr + " has max RSSI so far: " + maxRssiAddr );
+                    
+                    if( window.device.platform == iOSPlatform )
+                    {
+                        uIcd         = u8ScanResults[1];
+                        swVerBtScan  = U8ToHexText(u8ScanResults[2]) + "." + U8ToHexText(u8ScanResults[3]);            
+                    }
+                    else
+                    {
+                        uIcd        = u8ScanResults[24];
+                        swVerBtScan = U8ToHexText(u8ScanResults[25]) + "." + U8ToHexText(u8ScanResults[26]);
+                    }
+                }
+                
+                // If we are still scanning for the max then do not proceed below...
+                bDeviceFound = false;
+            }
+        }
+
 
         if( bDeviceFound )
         {
@@ -362,27 +390,6 @@ function startScanSuccess(obj)
                 {
                     PrintLog(1, "BT: This Cel-Fi address: " + obj.address + " matches the last connected Cel-Fi address: " + myLastBtAddress + ".  Reconnecting..." );
                     
-                    if( bMaxRssiScanning )
-                    {
-                        if( obj.rssi > maxRssi )
-                        {
-                            maxRssi      = obj.rssi;
-                            maxRssiAddr  = obj.adress
-                            bDeviceFound = false;
-                            PrintLog(1, "BT: This Cel-Fi address: " + maxRssiAddr + " has max RSSI so far: " + maxRssiAddr );
-                            
-                            if( window.device.platform == iOSPlatform )
-                            {
-                                uIcd         = u8ScanResults[1];
-                                swVerBtScan  = U8ToHexText(u8ScanResults[2]) + "." + U8ToHexText(u8ScanResults[3]);            
-                            }
-                            else
-                            {
-                                uIcd        = u8ScanResults[24];
-                                swVerBtScan = U8ToHexText(u8ScanResults[25]) + "." + U8ToHexText(u8ScanResults[26]);
-                            }
-                        }
-                    }
                 }
             }
         }
