@@ -3,7 +3,7 @@
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "WaveTools"
         versionCode = "10"
-        version     = "0.1.0">
+        version     = "0.2.3">
  
     <name>WaveTools</name>
  
