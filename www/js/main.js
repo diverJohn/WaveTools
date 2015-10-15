@@ -174,6 +174,19 @@ function UpdateRegButton(reg)
 
 
 
+function WaitForBluetooth()
+{ 
+    if(isSouthBoundIfCnx)
+    {
+        SetUartLocal();
+        setTimeout(GetStatus, 1000);         
+    }
+    else
+    {
+        // Try again in one second...
+        setTimeout(WaitForBluetooth, 1000);  
+    }
+}
 
 
 function GetStatus()
@@ -929,14 +942,11 @@ var app = {
 		uMainLoopCounter = 0;
 			
 
-        // Start with UART local...allow 3 sec for BT to get connected...
-        setTimeout(SetUartLocal, 3000);
 
 
-        // Get the status in 4 seconds          
-        setTimeout(GetStatus, 4000);  
-
-              
+        // Get the status in 4 seconds  
+        WaitForBluetooth();
+                
         UpdateStatusLine( "Wavetools ver: " + szVersion );
                         
         currentView = "main";
