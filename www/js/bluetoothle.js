@@ -133,6 +133,10 @@ var scanTimer          = null;
 var connectTimer       = null;
 var reconnectTimer     = null;
 var subscribeTimer     = null;
+var bMaxRssiScanning   = false;
+var maxRssi            = -200;
+var maxRssiAddr        = null;
+
 
 var myStatusWrittenObj = {"status":"written"};
 
@@ -230,8 +234,17 @@ function StartBluetoothScan()
 {
 	PrintLog(10, "BT: Starting scan for Cel-Fi devices.");
     var paramsObj = {"serviceAssignedNumbers":[bridgeServiceUuid]};
+    
+    bMaxRssiScanning = true;
+    setTimeout(scanMaxRssiTimeout, 1000 )
     bluetoothle.startScan(startScanSuccess, startScanError, paramsObj);
 }
+
+function scanMaxRssiTimeout()
+{
+    bMaxRssiScanning = false;
+}
+
 
 function startScanSuccess(obj)
 {
@@ -348,6 +361,28 @@ function startScanSuccess(obj)
                 else
                 {
                     PrintLog(1, "BT: This Cel-Fi address: " + obj.address + " matches the last connected Cel-Fi address: " + myLastBtAddress + ".  Reconnecting..." );
+                    
+                    if( bMaxRssiScanning )
+                    {
+                        if( obj.rssi > maxRssi )
+                        {
+                            maxRssi      = obj.rssi;
+                            maxRssiAddr  = obj.adress
+                            bDeviceFound = false;
+                            PrintLog(1, "BT: This Cel-Fi address: " + maxRssiAddr + " has max RSSI so far: " + maxRssiAddr );
+                            
+                            if( window.device.platform == iOSPlatform )
+                            {
+                                uIcd         = u8ScanResults[1];
+                                swVerBtScan  = U8ToHexText(u8ScanResults[2]) + "." + U8ToHexText(u8ScanResults[3]);            
+                            }
+                            else
+                            {
+                                uIcd        = u8ScanResults[24];
+                                swVerBtScan = U8ToHexText(u8ScanResults[25]) + "." + U8ToHexText(u8ScanResults[26]);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -355,26 +390,13 @@ function startScanSuccess(obj)
  
         if( bDeviceFound )
         {
-         
-            if( window.device.platform == iOSPlatform )
-            {
-                uIcd         = u8ScanResults[1];
-                swVerBtScan  = U8ToHexText(u8ScanResults[2]) + "." + U8ToHexText(u8ScanResults[3]);            
-            }
-            else
-            {
-                uIcd        = u8ScanResults[24];
-                swVerBtScan = U8ToHexText(u8ScanResults[25]) + "." + U8ToHexText(u8ScanResults[26]);
-            }
-        
-        
             bluetoothle.stopScan(stopScanSuccess, stopScanError);
             clearScanTimeout();
     
             // Store the address on the phone...not used
 //            window.localStorage.setItem(addressKey, obj.address);
         
-            ConnectBluetoothDevice(obj.address);
+            ConnectBluetoothDevice(maxRssiAddr);
         }
         
     }  // if we have found "advertisement"
