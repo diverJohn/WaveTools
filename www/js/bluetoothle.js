@@ -244,6 +244,7 @@ function StartBluetoothScan()
 function scanMaxRssiTimeout()
 {
     bMaxRssiScanning = false;
+    PrintLog(10, "BT: Set bMaxRssiScanning to false.  bMaxRssiScanning="  + bMaxRssiScanning );
 }
 
 
@@ -347,7 +348,10 @@ function startScanSuccess(obj)
                 bDeviceFound = true;
             } 
         }   
-        
+ 
+ 
+PrintLog(10, "BT: bdeviceFound=" + bDeviceFound + "  myLastBtAddress=" + myLastBtAddress + " bMaxRssiScanning=" + bMaxRssiScanning + "  connectTimer=" + connectTimer );
+         
         // See if we need to continue scanning to look for max RSSI, only if we have not connected before...
         if( bDeviceFound && (myLastBtAddress == null) )
         {
@@ -397,7 +401,6 @@ function startScanSuccess(obj)
             }
         }
          
- PrintLog(1, "BT: bdeviceFound=" + bDeviceFound + "  connectTimer=" + connectTimer );
  
         if( bDeviceFound && (connectTimer == null) )
         {
@@ -434,6 +437,14 @@ function scanTimeout()
 {
   PrintLog(10, "BT: Scanning time out, stopping");
   bluetoothle.stopScan(stopScanSuccess, stopScanError);
+  
+  if( (maxRssiAddr != null) && (connectTimer == null) )
+  {
+    bluetoothle.stopScan(stopScanSuccess, stopScanError);
+    ConnectBluetoothDevice(maxRssiAddr);
+  }
+            
+              
 }
 
 function clearScanTimeout()
