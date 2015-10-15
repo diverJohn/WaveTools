@@ -236,6 +236,7 @@ function StartBluetoothScan()
     var paramsObj = {"serviceAssignedNumbers":[bridgeServiceUuid]};
     
     bMaxRssiScanning = true;
+    connectTimer     = null;
     setTimeout(scanMaxRssiTimeout, 1000 )
     bluetoothle.startScan(startScanSuccess, startScanError, paramsObj);
 }
@@ -397,7 +398,7 @@ function startScanSuccess(obj)
         }
          
  
-        if( bDeviceFound )
+        if( bDeviceFound && (connectTimer == null) )
         {
             bluetoothle.stopScan(stopScanSuccess, stopScanError);
             clearScanTimeout();
