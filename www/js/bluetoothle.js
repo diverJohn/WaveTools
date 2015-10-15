@@ -352,6 +352,7 @@ function startScanSuccess(obj)
         {
             if( bMaxRssiScanning )
             {
+                PrintLog(10, "BT: Max RSSI scanning, addr: " + obj.address + " RSSI: " + obj.rssi + " max RSSI so far:" + maxRssi );
                 
                 if( obj.rssi > maxRssi )
                 {
