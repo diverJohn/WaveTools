@@ -178,8 +178,8 @@ function WaitForBluetooth()
 { 
     if(isSouthBoundIfCnx)
     {
-        SetUartLocal();
-        setTimeout(GetStatus, 1000);         
+        setTimeout(SetUartLocal, 1000 );
+        setTimeout(GetStatus, 2000);         
     }
     else
     {
