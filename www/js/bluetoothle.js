@@ -397,6 +397,7 @@ function startScanSuccess(obj)
             }
         }
          
+ PrintLog(1, "BT: bdeviceFound=" + bDeviceFound + "  connectTimer=" + connectTimer );
  
         if( bDeviceFound && (connectTimer == null) )
         {
