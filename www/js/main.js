@@ -929,12 +929,12 @@ var app = {
 		uMainLoopCounter = 0;
 			
 
-        // Start with UART local...allow 1 sec for BT to get connected...
-        setTimeout(SetUartLocal, 1000);
+        // Start with UART local...allow 2 sec for BT to get connected...
+        setTimeout(SetUartLocal, 2000);
 
 
-        // Get the status in 2 seconds          
-        setTimeout(GetStatus, 2000);  
+        // Get the status in 3 seconds          
+        setTimeout(GetStatus, 3000);  
 
               
         UpdateStatusLine( "Wavetools ver: " + szVersion );

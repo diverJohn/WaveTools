@@ -352,13 +352,12 @@ function startScanSuccess(obj)
         {
             if( bMaxRssiScanning )
             {
-                PrintLog(10, "BT: Max RSSI scanning, addr: " + obj.address + " RSSI: " + obj.rssi + " max RSSI so far:" + maxRssi );
                 
                 if( obj.rssi > maxRssi )
                 {
                     maxRssi      = obj.rssi;
                     maxRssiAddr  = obj.address
-                    PrintLog(10, "BT: This Cel-Fi address: " + maxRssiAddr + " has max RSSI so far: " + maxRssiAddr );
+                    PrintLog(10, "BT: This Cel-Fi address: " + maxRssiAddr + " has max RSSI so far: " + maxRssi );
                     
                     if( window.device.platform == iOSPlatform )
                     {
