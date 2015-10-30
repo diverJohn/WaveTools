@@ -440,7 +440,7 @@ function startScanSuccess(obj)
   else if (obj.status == "scanStarted")
   {
     PrintLog(10, "BT: Scan was started successfully, stopping in 2 sec.");
-    scanTimer = setTimeout(scanTimeout, 2000);
+//jdo    scanTimer = setTimeout(scanTimeout, 2000);
   }
   else
   {
