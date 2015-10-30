@@ -49,7 +49,7 @@ var szNoStatus              = "No status response from unit so ICD version not k
 // Level  4: Timing loops
 // Level 10: Bluetooth processing.
 // Level 99: Error, print in red.
-var PrintLogLevel = 3;
+var PrintLogLevel = 10;
 
 
 // PrintLog............................................................................................
@@ -125,7 +125,7 @@ function UpdateStatusLine(statusText)
 // UpdateRssiLine....................................................................................
 function UpdateRssiLine(rssiVal)
 {
-    document.getElementById("rssi_line_id").innerHTML = "RSSI: " + rssiVal;
+    document.getElementById("rssi_line_id").innerHTML = rssiVal;
 }
 
 // HandleButtonDown............................................................................................
@@ -1011,6 +1011,7 @@ function GetRssiPeriodically()
 function DisplayRssiScanPeriodically()
 {
     var outRssi = "";
+    var i;
     
     for( i = 0; i < MAX_RSSI_LIST; i++ )
     {
