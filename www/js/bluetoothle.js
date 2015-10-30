@@ -3,7 +3,7 @@
 //  File: bluetoothle.js
 //
 //  Description:  This file contains all functionality to connect and maintain a connection
-//                to a Nextivity bluetoothle device.
+//                to a Nextivity bluetoothle device.  Use with plugin 1.0.6.
 //
 //
 //                External functionality that must be maintained to support the SouthBound IF concept:
@@ -97,9 +97,13 @@
 //      
 //
 
+// Bluetooth RSSI list....
+var btAddrList              = [0,0,0,0,0,0,0,0,0,0];
+var btRssiList              = [0,0,0,0,0,0,0,0,0,0];
+const MAX_RSSI_LIST         = 10;
 
 // Use the following global variables to determine South Bound IF status.
-var isSouthBoundIfStarted   = false;    // Check is isSouthBoundIfEnabled after isShouthBoundIfStarted is true...
+var isSouthBoundIfStarted   = false;    // Check if isSouthBoundIfEnabled after isShouthBoundIfStarted is true...
 var isSouthBoundIfEnabled   = false;
 var isSouthBoundIfCnx       = false;
 var szSouthBoundIfEnableMsg = "Bluetooth Required: Please Enable...";
@@ -169,14 +173,14 @@ function initializeSuccess(obj)
 {
   if (obj.status == "enabled")
   {
-    // If we initialize successfully, start a loop to maintain a connection...
+      // If we initialize successfully, start a loop to maintain a connection...
       PrintLog(10, "BT: Initialization successful, starting periodic bluetooth maintenance loop...");
       isSouthBoundIfEnabled = true;
       BluetoothLoop();
   }
   else
   {
-    PrintLog(99, "BT: Unexpected initialize status: " + obj.status);
+      PrintLog(99, "BT: Unexpected initialize status: " + obj.status);
   }
   
   isSouthBoundIfStarted = true;
@@ -237,7 +241,7 @@ function StartBluetoothScan()
     
     bMaxRssiScanning = true;
     connectTimer     = null;
-    setTimeout(scanMaxRssiTimeout, 1000 );
+//jdo    setTimeout(scanMaxRssiTimeout, 1000 );
     bluetoothle.startScan(startScanSuccess, startScanError, paramsObj);
 }
 
@@ -250,6 +254,8 @@ function scanMaxRssiTimeout()
 
 function startScanSuccess(obj)
 {
+  var i;
+  
   if (obj.status == "scanResult")
   {
     var scanStr = JSON.stringify(obj);  
@@ -264,7 +270,7 @@ function startScanSuccess(obj)
         // Save the Scan Results data...
         if( bytes.length != 0 )
         {
-            for( var i = 0; i < SCAN_RESULTS_SIZE; i++ )
+            for( i = 0; i < SCAN_RESULTS_SIZE; i++ )
             {
                 if( i < bytes.length )
                 {
@@ -327,7 +333,6 @@ function startScanSuccess(obj)
             //                                                                    ICD                                                  ICD
     
             // See if we can match the 128-bit, 16 byte, UUID.  128-bit UUID starts at offset [5].
-            var i;
             for( i = 5; i < nxty128Uuid.length; i++ )
             {
                 if( u8ScanResults[i] != nxty128Uuid[i] )
@@ -349,8 +354,6 @@ function startScanSuccess(obj)
             } 
         }   
  
- 
-// PrintLog(10, "BT: bdeviceFound=" + bDeviceFound + "  myLastBtAddress=" + myLastBtAddress + " bMaxRssiScanning=" + bMaxRssiScanning + "  connectTimer=" + connectTimer );
          
         // See if we need to continue scanning to look for max RSSI, only if we have not connected before...
         if( bDeviceFound && (myLastBtAddress == null) )
@@ -376,6 +379,23 @@ function startScanSuccess(obj)
                         swVerBtScan = U8ToHexText(u8ScanResults[25]) + "." + U8ToHexText(u8ScanResults[26]);
                     }
                 }
+
+                // Fill the BT address list...          
+                for( i = 0; i < MAX_RSSI_LIST; i++ )
+                {
+                    if( btAddrList[i] == 0 )
+                    {
+                        btAddrList[i] = obj.address;
+                        btRssiList[i] = obj.rssi;
+                        break;
+                    }
+                    else if( btAddrList[i] == obj.address )
+                    {
+                        btRssiList[i] = obj.rssi;
+                        break;
+                    }
+                }    
+
                 
                 // If we are still scanning for the max then do not proceed below...
                 bDeviceFound = false;
@@ -479,21 +499,13 @@ function UpdateBluetoothIcon(cnx)
 {
     if(cnx)
     {
-        if( document.getElementById("bt_icon_id").innerHTML != szSbIfIconOn )
-        {
-            document.getElementById("bt_icon_id").innerHTML = szSbIfIconOn;
-        }
-        isSouthBoundIfCnx = true;
-        
-        
+        guiIconSbIfHtml       = szSbIfIconOn;
+        isSouthBoundIfCnx     = true;
     }
     else
     {
-        if( document.getElementById("bt_icon_id").innerHTML != szSbIfIconOff )
-        {
-            document.getElementById("bt_icon_id").innerHTML = szSbIfIconOff;
-        }
-        isSouthBoundIfCnx        = false;
+        guiIconSbIfHtml       = szSbIfIconOff;
+        isSouthBoundIfCnx     = false;
         isBluetoothSubscribed = false;
         u8ScanResults[0]      = 0;
     }
@@ -510,7 +522,7 @@ function UpdateBluetoothIcon(cnx)
 // If a timeout occurs, the connection attempt should be canceled using disconnect().
 function ConnectBluetoothDevice(address)
 {
-  PrintLog(10, "BT: Begin connection to: " + address + " with 5 second timeout");
+  PrintLog(1, "BT: Connecting to: " + address + " Max RSSI= " + maxRssi );     // 5 second timeout
   
   var paramsObj = {"address":address};
   bluetoothle.connect(connectSuccess, connectError, paramsObj);
@@ -527,7 +539,7 @@ function connectSuccess(obj)
     myLastBtAddress = obj.address;
 
     // Update the bluetooth icon...
-    UpdateBluetoothIcon( true );
+//    UpdateBluetoothIcon( true );
 
     clearConnectTimeout();
     
@@ -545,7 +557,9 @@ function connectSuccess(obj)
     
     if( obj.status == "disconnected" )
     {
-        CloseBluetoothDevice();
+//        CloseBluetoothDevice();
+        maxRssiAddr = null;
+        DisconnectBluetoothDevice();        // Disconnect and close
     }
     clearConnectTimeout();
   }
@@ -622,14 +636,14 @@ function closeSuccess(obj)
         UpdateBluetoothIcon( false );
     }
     else
-      {
-      PrintLog(99, "BT: Unexpected close status: " + obj.status);
-      }
+    {
+        PrintLog(99, "BT: Unexpected close status: " + obj.status);
+    }
 }
 
 function closeError(obj)
 {
-  PrintLog(99, "BT: Close error: " + obj.error + " - " + obj.message);
+    PrintLog(99, "BT: Close error: " + obj.error + " - " + obj.message);
 }
 
 
@@ -834,17 +848,18 @@ function subscribeSuccess(obj)
     {
         PrintLog(10, "BT: Subscription started");
         isBluetoothSubscribed = true;
+        UpdateBluetoothIcon( true );        // Wait until here before saying isSouthBoundIfCnx
     }
     else
-      {
+    {
         PrintLog(99, "BT: Unexpected subscribe status: " + obj.status);
         DisconnectBluetoothDevice();
-  }
+    }
 }
 
 function subscribeError(msg)
 {
-      PrintLog(99, "BT: Subscribe error: " + msg.error + " - " + msg.message);
+    PrintLog(99, "BT: Subscribe error: " + msg.error + " - " + msg.message);
 }
 
 function unsubscribeDevice()
@@ -1099,7 +1114,7 @@ function SetMaxTxPhoneBuffers(numBuffers)
 
 
 
-
+/*
 
 // GetBluetoothRssi........................................................................
 function GetBluetoothRssi()
@@ -1124,6 +1139,7 @@ function rssiError(msg)
     PrintLog(99, "BT: GetRssi error: " + msg.error + " - " + msg.message);
 }
 
+*/
 
 
 
