@@ -1022,6 +1022,7 @@ function DisplayRssiScanPeriodically()
     }    
 
     UpdateRssiLine( outRssi );
+    PrintLog(1, outRssi );
     setTimeout(DisplayRssiScanPeriodically, 250);    
 }
     
