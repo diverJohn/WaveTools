@@ -49,7 +49,7 @@ var szNoStatus              = "No status response from unit so ICD version not k
 // Level  4: Timing loops
 // Level 10: Bluetooth processing.
 // Level 99: Error, print in red.
-var PrintLogLevel = 1;
+var PrintLogLevel = 3;
 
 
 // PrintLog............................................................................................
@@ -125,7 +125,7 @@ function UpdateStatusLine(statusText)
 // UpdateRssiLine....................................................................................
 function UpdateRssiLine(rssiVal)
 {
-    document.getElementById("rssi_line_id").innerHTML = rssiVal;
+    document.getElementById("rssi_line_id").innerHTML = "RSSI: " + rssiVal;
 }
 
 // HandleButtonDown............................................................................................
@@ -909,15 +909,14 @@ var app = {
             "<img src='img/header_main.png' width='100%' />" +
             
                myBluetoothIcon +
-/*
-jdo               
+               
               "<button id='reg_button_id'         type='button' class='mybutton' onclick='app.handleRegKey()'>       <img src='img/button_Register.png' />          </button>" +
             "<button id='unreg_button_id'       type='button' class='mybutton' onclick='app.handleUnRegKey()'>     <img src='img/button_UnRegister.png' />        </button>" +
             "<button id='quick_lock_button_id'  type='button' class='mybutton' onclick='app.handleQLockKey()'>     <img src='img/button_QuickLocationLock.png' /> </button>" +
             "<button id='clear_lock_button_id'  type='button' class='mybutton' onclick='app.handleCLockKey()'>     <img src='img/button_ClearLocationLock.png' /> </button>" +
             "<button id='bypass_cac_button_id'  type='button' class='mybutton' onclick='app.handleBypassCacKey()'> <img src='img/button_BypassCac.png' />         </button>" +
-*/            
-            szMyRssiLine +
+            
+//            szMyRssiLine +
             szMyStatusLine;
               
 
@@ -925,7 +924,6 @@ jdo
         
 
         // Make the buttons change when touched...    
-/*        
          document.getElementById("reg_button_id").addEventListener('touchstart', HandleButtonDown );
          document.getElementById("reg_button_id").addEventListener('touchend',   HandleButtonUp );
 
@@ -954,11 +952,10 @@ jdo
         currentView = "main";
         
         SpinnerStart( "", "Get current status..." );
-*/
+
         
 //        UpdateRssiLine( -100 );               
 //        GetRssiPeriodically();
-        DisplayRssiScanPeriodically();
         
     },
 
@@ -1008,21 +1005,5 @@ function GetRssiPeriodically()
 }
 
 
-function DisplayRssiScanPeriodically()
-{
-    var outRssi = "";
-    var i;
-    
-    for( i = 0; i < MAX_RSSI_LIST; i++ )
-    {
-        if( btAddrList[i] != 0 )
-        {
-            outRssi += btAddrList[i] + " : " + btRssiList[i] + "<br>";
-        }
-    }    
 
-    UpdateRssiLine( outRssi );
-    PrintLog(1, outRssi );
-    setTimeout(DisplayRssiScanPeriodically, 250);    
-}
     
