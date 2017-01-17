@@ -178,8 +178,14 @@ function WaitForBluetooth()
 { 
     if(isSouthBoundIfCnx)
     {
+
+/*
+        // jdo Normal operation    
         setTimeout(SetUartLocal, 1000 );
-        setTimeout(GetStatus, 2000);         
+        setTimeout(GetStatus, 2000);     
+*/
+        
+        SpinnerStop();  // jdo added to stop spinner when BT connected
     }
     else
     {
