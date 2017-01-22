@@ -106,7 +106,10 @@
 const   BOARD_CFG_CABLE_BOX_BIT       = 0x4000;   // Bit 14 means cable box
 const   BOARD_CFG_USE_THIS_DEVICE     = 0x0000;   // Set to 0 for non-cable box, or 0x4000 for cable box.  
 
+var guiDeviceFlag           = false;            // Flag:  true:  display device selection 
 var guiDeviceAddrList       = [];               // An array of device addresses to select. (Android: MAC, IOS: Mangled MAC)
+var guiDeviceRssiList       = [];               // An array of associated BT RSSI values...
+var guiDeviceList           = [];               // An array of device IDs, i.e. Serial Numbers, to display for user to select.
                         
 // Use the following global variables to determine South Bound IF status.
 var isSouthBoundIfStarted   = false;    // Check if isSouthBoundIfEnabled after isShouthBoundIfStarted is true...
