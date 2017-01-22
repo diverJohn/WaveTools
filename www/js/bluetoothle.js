@@ -113,9 +113,9 @@ var isSouthBoundIfEnabled   = false;
 var isSouthBoundIfCnx       = false;
 var bSouthBoundWriteError   = false;
 var isSouthBoundIfListDone  = false;
-var szSouthBoundIfEnableMsg = GetLangString("SouthBoundIfEnableMsgBT");     // "Bluetooth Required: Please Enable...";
-var szSouthBoundIfNotCnxMsg = GetLangString("SouthBoundIfNotCnxMsgBT");     //  "Bluetooth connection lost.";
-var szSouthBoundIfInfoMsg   = GetLangString("SouthBoundIfInfoMsgBT");       // "Indicates if connected to Cel-Fi device via Bluetooth.\nBlue means connected.\nGray means not connected.\nCurrent status: ";
+var szSouthBoundIfEnableMsg = "Bluetooth Required: Please Enable...";
+var szSouthBoundIfNotCnxMsg = "Bluetooth connection lost.";
+var szSouthBoundIfInfoMsg   = "Indicates if connected to Cel-Fi device via Bluetooth.\nBlue means connected.\nGray means not connected.\nCurrent status: ";
 
 
 var addressKey      = "address";
@@ -1546,14 +1546,14 @@ function GetDeviceSerialNumbersLoop()
                                     
                                 if( bPrivacyViewed == true )
                                 {
-                                    var outText = GetLangString("Found") + " " + numDevFound + " ";
+                                    var outText = "Found " + numDevFound + " ";
                                     if( numDevFound == 1 )
                                     {
-                                        outText += GetLangString("CelFiDevice");
+                                        outText += "CelFiDevice";
                                     }
                                     else
                                     {
-                                        outText += GetLangString("CelFiDevices");
+                                        outText += "CelFiDevices";
                                     }
 
                                     document.getElementById("searchMessageBox").innerHTML = outText;
@@ -1650,14 +1650,14 @@ function GetDeviceSerialNumbersLoop()
                                     
                             if( bPrivacyViewed == true )
                             {
-                                var outText = GetLangString("Found") + " " + numDevFound + " ";
+                                var outText = "Found " + numDevFound + " ";
                                 if( numDevFound == 1 )
                                 {
-                                    outText += GetLangString("CelFiDevice");
+                                    outText += "CelFiDevice";
                                 }
                                 else
                                 {
-                                    outText += GetLangString("CelFiDevices");
+                                    outText += "CelFiDevices";
                                 }
                             
                                 document.getElementById("searchMessageBox").innerHTML = outText;
@@ -1738,7 +1738,7 @@ function GetDeviceSerialNumbersLoop()
         }
         else
         {
-        	ShowAlertPopUpMsg( GetLangString("BluetoothRangeIssue"), GetLangString("BluetoothRangeIssueMsg") );
+        	ShowAlertPopUpMsg( "Bluetooth Range Issue", "Unable to retrieve data from the booster. Please move closer to your booster and retry." );
             guiDeviceFlag = false;
         }
 
