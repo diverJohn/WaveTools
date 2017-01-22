@@ -1703,7 +1703,7 @@ function GetDeviceSerialNumbersLoop()
     }
     else
     {
-        StopWaitPopUpMsg();
+//        StopWaitPopUpMsg();
 
         PrintLog(1, "guiDeviceAddrList      = " + JSON.stringify(guiDeviceAddrList) ); // An array of device BT addresses to select.
         PrintLog(1, "guiDeviceRssiList      = " + JSON.stringify(guiDeviceRssiList) ); // An array of RSSI values.

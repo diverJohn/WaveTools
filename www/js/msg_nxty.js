@@ -2083,3 +2083,9 @@ function ResetAresSuperMsg()
     nxtyCurrentReq = NXTY_SUPER_MSG_RESET_ARES;
     nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
 }
+
+// ClearNxtyMsgPending.......................................................................................
+function ClearNxtyMsgPending()
+{ 
+    msgRxLastCmd      = NXTY_INIT; // Make sure we can send the next message.
+}
