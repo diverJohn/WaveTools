@@ -176,6 +176,21 @@ function UpdateRegButton(reg)
 
 
 
+function WaitForFileSystemThenStartSouthboundIf()
+{ 
+    if(bfileOpenLogFileSuccess)
+    {
+        // Now that the file system is open, start SouthBound Interface...
+        OpenSouthBoundIf();
+    }
+    else
+    {
+        // Try again in one second...
+        setTimeout(WaitForFileSystemThenStartSouthboundIf, 1000);  
+    }
+}
+
+
 function WaitForBluetooth()
 { 
     if(isSouthBoundIfCnx)
@@ -284,7 +299,7 @@ var app = {
         // Only start bluetooth if on a phone...
         if( window.isPhone )
         {
-            OpenSouthBoundIf();
+            WaitForFileSystemThenStartSouthboundIf();
         }
     },   
        
