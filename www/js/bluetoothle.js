@@ -449,6 +449,8 @@ function startScanSuccess(obj)
           deviceFoundUIFlag = true;
         }
 
+        PrintLog(10, "BT: bDeviceFound= " + bDeviceFound + " myLastBtAddress= " + myLastBtAddress + " bMaxRssiScanning= " + bMaxRssiScanning );
+
         // See if we need to continue scanning to look for max RSSI, only if we have not connected before...
         if( bDeviceFound && (myLastBtAddress == null) )
         {
