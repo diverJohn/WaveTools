@@ -304,7 +304,7 @@ function StartBluetoothScan()
 
     bMaxRssiScanning = true;
     connectTimer     = null;
-    setTimeout(scanMaxRssiTimeout, 1000 );
+//    setTimeout(scanMaxRssiTimeout, 1000 );
     bluetoothle.startScan(startScanSuccess, startScanError, paramsObj);
 }
 
