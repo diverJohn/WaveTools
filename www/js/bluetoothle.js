@@ -1780,9 +1780,13 @@ function GetDeviceSerialNumbersLoop()
         }
         else
         {
-        	showAlert( "Unable to retrieve data from the booster. Automatically Retrying...", "Bluetooth Range Issue" );
+            navigator.notification.confirm(
+                'Unable to retrieve data from the booster. Please move closer.',    // message
+                    HandleBtConfirmation,                   // callback to invoke with index of button pressed
+                    'Bluetooth Range Issue',                // title
+                    ['Retry'] );                               // buttonLabels
+        
             guiDeviceFlag = false;
-            RestartSouthBoundIf(true);
         }
 
         // Clean up...
@@ -1900,6 +1904,16 @@ function CnxId()
 }
 
 
+// HandleBtConfirmation.......................................................................................
+function HandleBtConfirmation(buttonIndex) 
+{
+    // buttonIndex = 0 if dialog dismissed, i.e. back button pressed.
+    // buttonIndex = 1 if 'Retry'
+    if( buttonIndex == 1 )
+    {
+        RestartSouthBoundIf(true);
+    }
+}
 
 
 
