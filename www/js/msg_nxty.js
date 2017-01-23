@@ -571,6 +571,26 @@ var nxty = {
                 
                 UpdateStatusLine( "Wavetools ver: " + szVersion + " ICD: 0x" + nxtyRxStatusIcd.toString(16) );
                 
+                
+                // Only grab the BoardConfig value if old ICD, <= 0x07. 
+                if( nxtyRxStatusIcd <= V1_ICD )
+                {
+                    nxtyRxStatusHw          = (u8RxBuff[2] << 8) | u8RxBuff[3];
+                    nxtyRxStatusBoardConfig = (u8RxBuff[6] << 8) | u8RxBuff[7];
+                    bCnxToCu                = (nxtyRxStatusBoardConfig & IM_A_CU_MASK)?true:false;
+                    bCnxToOneBoxNu          = (nxtyRxStatusBoardConfig & IM_A_1BOX_NU_MASK)?true:false;
+                    if( bCnxToOneBoxNu )
+                    {
+                        PrintLog(1,  "Msg: V1_ICD. Cnx to One Box" );
+                    }
+                    else
+                    {
+                        PrintLog(1,  "Msg: V1_ICD. Cnx to Two Box" );
+                    }
+                }
+                            
+                isNxtyStatusCurrent = true;
+                
                 break;
                }
         

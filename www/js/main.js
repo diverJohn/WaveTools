@@ -40,6 +40,8 @@ var retryObject             = null;
 var retryCount              = 0;
 var bSpinner                = false;
 var szNoStatus              = "No status response from unit so ICD version not known...kill app and retry";
+var bCnxToCu                    = true;             // Set to true if connected locally to CU after reading local BoardConfig.
+var bCnxToOneBoxNu              = false;            // Set to true if connected to a 1-Box NU, all UART redirects are disabled.
 
 
 // Determine which messages get sent to the console.  1 normal, 10 verbose.
