@@ -227,11 +227,9 @@ function initializeError(obj)
   PrintLog(99, "BT: Initialize error: " + obj.error + " - " + obj.message);
   isSouthBoundIfEnabled = false;
   isSouthBoundIfStarted = true;
-  ShowConfirmPopUpMsg( 'KEY_BLUETOOTH_REQUIRED',               // title
-          "This app requires Bluetooth to be enabled.<br>Please activate Bluetooth from your system settings.",    // message text written by handler, this text written to log.
-          HandlePrivacyConfirmation,      // callback to invoke with index of button pressed
-          ['Ok'] );
+  showAlert( "This app requires Bluetooth to be enabled.", "Bluetooth Required" );
 }
+ 
 
 
 
@@ -1782,8 +1780,9 @@ function GetDeviceSerialNumbersLoop()
         }
         else
         {
-        	showAlert( "Unable to retrieve data from the booster. Please move closer to your booster and retry.", "Bluetooth Range Issue" );
+        	showAlert( "Unable to retrieve data from the booster. Automatically Retrying...", "Bluetooth Range Issue" );
             guiDeviceFlag = false;
+            RestartSouthBoundIf(true);
         }
 
         // Clean up...
