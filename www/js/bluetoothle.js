@@ -449,7 +449,7 @@ function startScanSuccess(obj)
           deviceFoundUIFlag = true;
         }
 
-        PrintLog(10, "BT: bDeviceFound= " + bDeviceFound + " myLastBtAddress= " + myLastBtAddress + " bMaxRssiScanning= " + bMaxRssiScanning );
+        PrintLog(10, "BT: bDeviceFound=" + bDeviceFound + " myLastBtAddress=" + myLastBtAddress + " bMaxRssiScanning=" + bMaxRssiScanning );
 
         // See if we need to continue scanning to look for max RSSI, only if we have not connected before...
         if( bDeviceFound && (myLastBtAddress == null) )
@@ -606,6 +606,15 @@ function UpdateBluetoothIcon(cnx)
         {
             PrintLog(1, "BT: Set isSouthBoundIfCnx to true" );
         }
+        
+        if( isSouthBoundIfListDone )
+        {
+            if( document.getElementById("bt_icon_id").innerHTML != szSbIfIconOn )
+            {
+                document.getElementById("bt_icon_id").innerHTML = szSbIfIconOn;
+            }
+        }
+        
         isSouthBoundIfCnx     = true;
     }
     else
@@ -613,7 +622,14 @@ function UpdateBluetoothIcon(cnx)
         if( isSouthBoundIfCnx == true )
         {
             PrintLog(1, "BT: Set isSouthBoundIfCnx to false" );
+            
         }
+        
+        if( document.getElementById("bt_icon_id").innerHTML != szSbIfIconOff )
+        {
+            document.getElementById("bt_icon_id").innerHTML = szSbIfIconOff;
+        }
+        
         isSouthBoundIfCnx     = false;
         isBluetoothSubscribed = false;
         u8ScanResults[0]      = 0;
