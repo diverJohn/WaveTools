@@ -1025,7 +1025,8 @@ function subscribeSuccess(obj)
         {
             UpdateBluetoothIcon( true );        // Wait until here before saying isSouthBoundIfCnx
         }
-        
+
+        isSouthBoundIfCnx     = true;           // Always indicate connected if subscribed.
         bDisconnectCalled = false;
     }
     else
