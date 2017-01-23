@@ -1591,6 +1591,8 @@ function GetDeviceSerialNumbersLoop()
                         }
                         else
                         {
+                            PrintLog(1, "BT: Calling GetBoardConfig()" );
+                        
                             GetBoardConfig();   // Get the board config to see if cable box, bit 14 set, or not.
                             getSnState = 3;
                         }
@@ -1609,6 +1611,7 @@ function GetDeviceSerialNumbersLoop()
                 // Wait until Board Config has been returned and then get SN if using this device...
                 case 3:
                 {
+                
                     if( bNxtySuperMsgRsp == true )
                     {
                         if( iNxtySuperMsgRspStatus == NXTY_SUPER_MSG_STATUS_SUCCESS )
