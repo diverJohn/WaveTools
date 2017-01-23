@@ -125,6 +125,8 @@ var szSouthBoundIfInfoMsg   = "Indicates if connected to Cel-Fi device via Bluet
 var addressKey      = "address";
 var btAddr          = null;   // Version 2.0.0 requires address for many functions.
 var myLastBtAddress = null;
+var bBtClosed       = true;
+
 
 // const   TX_MAX_BYTES_PER_CONN           = 20;
 const   TX_MAX_BYTES_PER_BUFFER         = 20;       // Android has 4 Tx buffers, IOS has 6 Tx buffers.
@@ -647,6 +649,8 @@ function ConnectBluetoothDevice(address)
 {
   PrintLog(1, "BT: ConnectBluetoothDevice(" + address + ")" );
 
+  bBtClosed = false;
+
   var paramsObj = {"address":address};
   bluetoothle.connect(connectSuccess, connectError, paramsObj);
     btAddr        = address;
@@ -773,6 +777,8 @@ function closeSuccess(obj)
     if (obj.status == "closed")
     {
         PrintLog(1, "BT Closed device");
+        
+        bBtClosed = true;
 
         if( bRefreshActive )
         {
@@ -1724,7 +1730,8 @@ function GetDeviceSerialNumbersLoop()
         getSnLoopCounter++;
 
         // Safety exit...
-        if( getSnLoopCounter > 40 )
+        if( ((bBtClosed == true) && (getSnLoopCounter > 10)) ||          // No sense to wait around if BT errors out. 
+             (getSnLoopCounter > 40) )                                  // Never go more than 40
         {
             if( isSouthBoundIfCnx )
             {
@@ -1912,6 +1919,7 @@ function HandleBtConfirmation(buttonIndex)
     // buttonIndex = 1 if 'Retry'
     if( buttonIndex == 1 )
     {
+        SpinnerStart( "", "Searching for Cel-Fi Devices..." );
         RestartSouthBoundIf(true);
     }
 }
