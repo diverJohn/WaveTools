@@ -1017,7 +1017,12 @@ function subscribeSuccess(obj)
         PrintLog(1, "BT: Subscription started - BT now able to receive Rx msgs.");
         ClearNxtyMsgPending();              // Make sure not stuck waiting for a response...
         isBluetoothSubscribed = true;
-        UpdateBluetoothIcon( true );        // Wait until here before saying isSouthBoundIfCnx
+        
+        if( isSouthBoundIfListDone )
+        {
+            UpdateBluetoothIcon( true );        // Wait until here before saying isSouthBoundIfCnx
+        }
+        
         bDisconnectCalled = false;
     }
     else
