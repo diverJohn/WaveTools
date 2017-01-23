@@ -174,6 +174,25 @@ var firstFoundIdx       = 0;
 var icdDeviceList       = []; 
 var boardCfgList        = [];
 
+
+
+//.................................................................................................................
+function stringifyReplaceToHex(key, value) 
+{
+    for( var i = 0; i < value.length; i++ )
+    {
+        if(typeof value[i] === 'undefined')
+        {
+            value[i] = "undefined";
+        }
+        else
+        {
+            value[i] = "0x" + value[i].toString(16);
+        }
+    }
+    return value;
+}
+
 // OpenSouthBoundIf...................................................................................
 function OpenSouthBoundIf()
 {
