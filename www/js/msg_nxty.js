@@ -56,6 +56,7 @@ const     NXTY_SUPER_MSG_CANCEL_REDIRECT_UART   = 0x05;
 const     NXTY_SUPER_MSG_SET_ANT_STATE          = 0x06;
 const     NXTY_SUPER_MSG_RESET_ARES             = 0x07;
 const     NXTY_SUPER_MSG_SET_NU_PARAM           = 0x0F;
+const     NXTY_SUPER_MSG_GET_BOARD_CONFIG       = 0x14;
 
 const   NXTY_SUPER_MSG_RSP                      = 0x53;
 const   NXTY_SUPER_MSG_PARAM_SEL_ARRAY    = ["0:Xfer Bufr",    "UniqueIdLsd",       "UniqueIdMsd",      "BuildId",         "SWVersion",         
@@ -1251,6 +1252,33 @@ var nxty = {
                         }
                     }
                 }
+                else if( nxtyCurrentReq == NXTY_SUPER_MSG_GET_BOARD_CONFIG )
+                {
+                    // Read the BoardConfig to see what type of unit we are talking to ...
+
+                    //                   Write BoardConfig      Read  
+                    // Tx: ae 62 9d 13   11 f0 0 0 20 0 0 0 6  10 f0 0 0 1c  
+                    // Rx  ae 31 ce 53   51 1                  50 0 0 0 7 
+                    //     [0]           [4]                   [6] 
+                    
+                    if( (u8RxBuff[4]  == NXTY_NAK_RSP) || (u8RxBuff[6]  == NXTY_NAK_RSP) ) 
+                    {
+                        // Got a NAK...
+                        iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_FAIL_NAK;
+                        PrintLog(99,  "Super Msg: Get Board Config msg type encountered a NAK." );
+                    }
+                    else
+                    {
+                        iNxtySuperMsgRspStatus = NXTY_SUPER_MSG_STATUS_SUCCESS;
+                        nxtyRxStatusBoardConfig = (u8RxBuff[9] << 8) | u8RxBuff[10];
+
+                        var outText = "Super Msg Rsp: Board Config: 0x" + nxtyRxStatusBoardConfig.toString(16) + " Communicating with: ";
+                        outText += (nxtyRxStatusBoardConfig & BOARD_CFG_CABLE_BOX_BIT)?"Cable Box ":"Non Cable Box ";
+                        outText += (nxtyRxStatusBoardConfig & IM_A_CU_MASK)?"CU":"NU";
+                        PrintLog(1,  outText );
+                    }
+                }
+                
                 else if( nxtyCurrentReq == NXTY_SUPER_MSG_SET_ANT_STATE )
                 {
                 
@@ -2082,6 +2110,36 @@ function ResetAresSuperMsg()
     
     nxtyCurrentReq = NXTY_SUPER_MSG_RESET_ARES;
     nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
+}
+
+
+// GetBoardConfig.......................................................................................
+function GetBoardConfig()
+{
+    var i            = 0;
+
+    PrintLog(1,  "Super Msg Send: Get Board Config to determine if communicating with CableBox or non-CableBox and NU or CU." );
+
+    // Read the Board Config to verify .................................................                
+    u8TempTxBuff[i++] = NXTY_WRITE_ADDRESS_REQ;
+    u8TempTxBuff[i++] = (NXTY_PCCTRL_SELPARAM_REG >> 24);  
+    u8TempTxBuff[i++] = (NXTY_PCCTRL_SELPARAM_REG >> 16);
+    u8TempTxBuff[i++] = (NXTY_PCCTRL_SELPARAM_REG >> 8);
+    u8TempTxBuff[i++] = NXTY_PCCTRL_SELPARAM_REG;
+    u8TempTxBuff[i++] = 0x00;                               
+    u8TempTxBuff[i++] = 0x00;
+    u8TempTxBuff[i++] = 0x00;
+    u8TempTxBuff[i++] = 0x05;                                     // Drop Board Config into xfer buffer
+    
+    u8TempTxBuff[i++] = NXTY_READ_ADDRESS_REQ;                    // Now read the xfer buffer.
+    u8TempTxBuff[i++] = (NXTY_PCCTRL_XFER_BUFFER >> 24);  
+    u8TempTxBuff[i++] = (NXTY_PCCTRL_XFER_BUFFER >> 16);
+    u8TempTxBuff[i++] = (NXTY_PCCTRL_XFER_BUFFER >> 8);
+    u8TempTxBuff[i++] = NXTY_PCCTRL_XFER_BUFFER;
+    
+    nxtyCurrentReq = NXTY_SUPER_MSG_GET_BOARD_CONFIG;
+    nxty.SendNxtyMsg(NXTY_SUPER_MSG_REQ, u8TempTxBuff, i);
+    
 }
 
 // ClearNxtyMsgPending.......................................................................................
