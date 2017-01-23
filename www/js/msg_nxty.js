@@ -81,6 +81,8 @@ const     NXTY_SEL_PARAM_REG_SN_TYPE      = 0x08;
 const     NXTY_SEL_PARAM_ANT_STATUS       = 0x10;
 const     NXTY_SEL_PARAM_REG_SUPPORT_DATA = 0x11;
 
+const     NXTY_SEL_PARAM_REG_SN_LSD_TYPE  = 0x08;
+const     NXTY_SEL_PARAM_REG_SN_MSD_TYPE  = 0x09;
 
 
 const   NXTY_NAK_RSP                    = 0xBB;
