@@ -202,7 +202,7 @@ function WaitForBluetooth()
         setTimeout(GetStatus, 2000);     
 */
         
-        SpinnerStop();  // jdo added to stop spinner when BT connected
+//        SpinnerStop();  // jdo added to stop spinner when BT connected
     }
     else
     {
@@ -968,13 +968,13 @@ var app = {
 
 
         // Get the status in 4 seconds  
-        WaitForBluetooth();
+//        WaitForBluetooth();
                 
         UpdateStatusLine( "Wavetools ver: " + szVersion );
                         
         currentView = "main";
         
-        SpinnerStart( "", "Get current status..." );
+        SpinnerStart( "", "Searching for Cel-Fi Devices..." );
 
         
 //        UpdateRssiLine( -100 );               
