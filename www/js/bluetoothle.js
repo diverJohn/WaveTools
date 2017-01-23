@@ -1761,7 +1761,7 @@ function GetDeviceSerialNumbersLoop()
         }
         else
         {
-        	ShowAlertPopUpMsg( "Bluetooth Range Issue", "Unable to retrieve data from the booster. Please move closer to your booster and retry." );
+        	showAlert( "Unable to retrieve data from the booster. Please move closer to your booster and retry.", "Bluetooth Range Issue" );
             guiDeviceFlag = false;
         }
 
