@@ -219,6 +219,9 @@ function initializeSuccess(obj)
   else
   {
       PrintLog(99, "BT: Unexpected initialize status: " + obj.status);
+      
+      Spinnerstop()
+      showAlert( obj.status, "Bluetooth Error" );
   }
 
   isSouthBoundIfStarted = true;
