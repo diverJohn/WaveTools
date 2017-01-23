@@ -536,8 +536,8 @@ function startScanSuccess(obj)
   }
   else if (obj.status == "scanStarted")
   {
-    PrintLog(1, "BT: Scan was started successfully, stopping in 2 sec.");
-    scanTimer = setTimeout(scanTimeout, 2000);
+    PrintLog(1, "BT: Scan was started successfully, stopping in 4 sec.");
+    scanTimer = setTimeout(scanTimeout, 4000);
   }
   else
   {
