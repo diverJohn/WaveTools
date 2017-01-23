@@ -1742,6 +1742,7 @@ function GetDeviceSerialNumbersLoop()
     else
     {
 //        StopWaitPopUpMsg();
+        SpinnerStop();  // jdo added to stop spinner
 
         PrintLog(1, "guiDeviceAddrList      = " + JSON.stringify(guiDeviceAddrList) ); // An array of device BT addresses to select.
         PrintLog(1, "guiDeviceRssiList      = " + JSON.stringify(guiDeviceRssiList) ); // An array of RSSI values.
@@ -1761,22 +1762,22 @@ function GetDeviceSerialNumbersLoop()
         isSouthBoundIfCnx      = false;
 
         // Bug 1518.   If not able to get SN from list of MAC addresses then show error...
-        if( numDevFound == 1 )
+        if( numDevFound >= 1 )
         {
             guiDeviceFlag   = false;
             myLastBtAddress = guiDeviceAddrList[firstFoundIdx];
             ConnectBluetoothDevice(guiDeviceAddrList[firstFoundIdx]);
             isSouthBoundIfListDone = true;      // Main app loop must be placed on hold until true.
             
+            
+            UpdateStatusLine( (boardCfgList[firstFoundIdx] & IM_A_CU_MASK)?"CU: ":"NU: " + guiDeviceList[firstFoundIdx]  );
+            
+            
             // Start the saftey check...
             if( BluetoothCnxTimer == null )
             {
                 BluetoothCnxTimer = setTimeout(BluetoothLoop, 5000);
             }
-        }
-        else if( numDevFound > 1 )
-        {
-            guiDeviceFlag = true;
         }
         else
         {
