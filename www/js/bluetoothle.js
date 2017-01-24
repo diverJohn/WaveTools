@@ -239,7 +239,7 @@ function initializeError(obj)
 
 
 // BluetoothLoop...................................................................................
-// Check every 5 seconds if not connected and subscribed and every 5 seconds if already connected...
+// Check every 5 seconds if not connected and subscribed and every 15 seconds if already connected...
 function BluetoothLoop()
 {
     var paramsObj = {"address":btAddr};
@@ -255,7 +255,7 @@ function isConnectedCallback(obj)
         UpdateBluetoothIcon( true );
 
         // Check again in 15 seconds since we are connected...
-        BluetoothCnxTimer = setTimeout(BluetoothLoop, 5000);
+        BluetoothCnxTimer = setTimeout(BluetoothLoop, 15000);
 
         if( isBluetoothSubscribed == false )
         {
@@ -606,7 +606,7 @@ function UpdateBluetoothIcon(cnx)
        
         if( isSouthBoundIfCnx == false )
         {
-            PrintLog(1, "BT: Set isSouthBoundIfCnx to true" );
+            PrintLog(1, "BT: UpdateBluetoothIcon(): Set isSouthBoundIfCnx to true" );
         }
         
         if( isSouthBoundIfListDone )
@@ -632,8 +632,7 @@ function UpdateBluetoothIcon(cnx)
     {
         if( isSouthBoundIfCnx == true )
         {
-            PrintLog(1, "BT: Set isSouthBoundIfCnx to false" );
-            
+            PrintLog(1, "BT: UpdateBluetoothIcon(): Set isSouthBoundIfCnx to false" );
         }
         
         if( document.getElementById("bt_icon_id").innerHTML != szSbIfIconOff )
