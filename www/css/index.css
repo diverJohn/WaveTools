@@ -180,12 +180,8 @@ td {background-color:#56A0D3; text-align: center; opacity: 0.85; border: 1px sol
 }
 
 .bt_main_icon {
-    background-color: Transparent;
-    border-color: Transparent;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-
+    text-align:center;
+    display:block;
 }
 
 .reg_icon {
