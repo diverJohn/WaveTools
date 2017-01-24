@@ -239,7 +239,7 @@ function initializeError(obj)
 
 
 // BluetoothLoop...................................................................................
-// Check every 5 seconds if not connected and subscribed and every 15 seconds if already connected...
+// Check every 5 seconds if not connected and subscribed and every 5 seconds if already connected...
 function BluetoothLoop()
 {
     var paramsObj = {"address":btAddr};
@@ -255,7 +255,7 @@ function isConnectedCallback(obj)
         UpdateBluetoothIcon( true );
 
         // Check again in 15 seconds since we are connected...
-        BluetoothCnxTimer = setTimeout(BluetoothLoop, 15000);
+        BluetoothCnxTimer = setTimeout(BluetoothLoop, 5000);
 
         if( isBluetoothSubscribed == false )
         {
