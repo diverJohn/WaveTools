@@ -1944,7 +1944,7 @@ function HandleBtConfirmation(buttonIndex)
     // buttonIndex = 1 if 'Retry'
     if( buttonIndex == 1 )
     {
-        SpinnerStart( "", "Searching for Cel-Fi Bluetooth Devices..." );
+        SpinnerStart( "", "Searching harder for Cel-Fi Devices..." );
         RestartSouthBoundIf(true);
     }
 }

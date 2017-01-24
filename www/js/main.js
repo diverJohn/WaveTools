@@ -993,7 +993,7 @@ var app = {
                         
         currentView = "main";
         
-        SpinnerStart( "", "Searching harder for Cel-Fi Devices..." );
+        SpinnerStart( "", "Searching for Cel-Fi Bluetooth Devices..." );
 
         
 //        UpdateRssiLine( -100 );               
