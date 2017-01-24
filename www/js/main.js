@@ -929,7 +929,7 @@ var app = {
     renderHomeView: function() 
     {
         var myBluetoothIcon = isSouthBoundIfCnx ? "<div id='bt_icon_id' class='bt_icon'>" + szSbIfIconOn + "</div>" : "<div  id='bt_icon_id' class='bt_icon'>" + szSbIfIconOff + "</div>";
-        var myBluetoothMain = isSouthBoundIfCnx ? "<div id='bt_main_id' class='bt_main_icon'>" + szSbIfMainOn + "</div>" : "<div  id='bt_icon_id' class='bt_main_icon'>" + szSbIfMainOff + "</div>";
+        var myBluetoothMain = isSouthBoundIfCnx ? "<div id='bt_main_id' class='bt_main_icon'>" + szSbIfMainOn + "</div>" : "<div  id='bt_main_id' class='bt_main_icon'>" + szSbIfMainOff + "</div>";
         
         if(bWaveTest)
         {
