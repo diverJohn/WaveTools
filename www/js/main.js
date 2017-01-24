@@ -7,6 +7,8 @@ const   MAIN_LOOP_COUNTER_MAX   = 20;
 
 var szSbIfIconOn            = "<img src='img/bluetooth_on.png' />";
 var szSbIfIconOff           = "<img src='img/bluetooth_off.png' />";
+var szSbIfMainOn            = "<img src='img/bt_main_on.png' />";
+var szSbIfMainOff           = "<img src='img/bt_main_off.png' />";
 var iOSPlatform             = "iOS";
 var androidPlatform         = "Android";
 
@@ -40,9 +42,9 @@ var retryObject             = null;
 var retryCount              = 0;
 var bSpinner                = false;
 var szNoStatus              = "No status response from unit so ICD version not known...kill app and retry";
-var bCnxToCu                    = true;             // Set to true if connected locally to CU after reading local BoardConfig.
-var bCnxToOneBoxNu              = false;            // Set to true if connected to a 1-Box NU, all UART redirects are disabled.
-
+var bCnxToCu                = true;             // Set to true if connected locally to CU after reading local BoardConfig.
+var bCnxToOneBoxNu          = false;            // Set to true if connected to a 1-Box NU, all UART redirects are disabled.
+var bWaveTest               = true;            // Set to false for normal WaveTools or true for Bluetooth test only.                
 
 // Determine which messages get sent to the console.  1 normal, 10 verbose.
 // Level  1: Flow and errors.
@@ -927,40 +929,58 @@ var app = {
     renderHomeView: function() 
     {
         var myBluetoothIcon = isSouthBoundIfCnx ? "<div id='bt_icon_id' class='bt_icon'>" + szSbIfIconOn + "</div>" : "<div  id='bt_icon_id' class='bt_icon'>" + szSbIfIconOff + "</div>";
+        var myBluetoothMain = isSouthBoundIfCnx ? "<div id='bt_main_id' class='bt_main_icon'>" + szSbIfMainOn + "</div>" : "<div  id='bt_icon_id' class='bt_main_icon'>" + szSbIfMainOff + "</div>";
         
-        var myHtml = 
-            "<img src='img/header_main.png' width='100%' />" +
-            
-               myBluetoothIcon +
-               
-              "<button id='reg_button_id'         type='button' class='mybutton' onclick='app.handleRegKey()'>       <img src='img/button_Register.png' />          </button>" +
-            "<button id='unreg_button_id'       type='button' class='mybutton' onclick='app.handleUnRegKey()'>     <img src='img/button_UnRegister.png' />        </button>" +
-            "<button id='quick_lock_button_id'  type='button' class='mybutton' onclick='app.handleQLockKey()'>     <img src='img/button_QuickLocationLock.png' /> </button>" +
-            "<button id='clear_lock_button_id'  type='button' class='mybutton' onclick='app.handleCLockKey()'>     <img src='img/button_ClearLocationLock.png' /> </button>" +
-            "<button id='bypass_cac_button_id'  type='button' class='mybutton' onclick='app.handleBypassCacKey()'> <img src='img/button_BypassCac.png' />         </button>" +
-            
-//            szMyRssiLine +
-            szMyStatusLine;
-              
-
-        $('body').html(myHtml); 
+        if(bWaveTest)
+        {
+            var myHtml = 
+                "<img src='img/header_main.png' width='100%' />" +
+                
+                myBluetoothIcon +
+                myBluetoothMain +
+                szMyStatusLine;
+    
+            $('body').html(myHtml); 
         
-
-        // Make the buttons change when touched...    
-         document.getElementById("reg_button_id").addEventListener('touchstart', HandleButtonDown );
-         document.getElementById("reg_button_id").addEventListener('touchend',   HandleButtonUp );
-
-        document.getElementById("unreg_button_id").addEventListener('touchstart', HandleButtonDown );
-        document.getElementById("unreg_button_id").addEventListener('touchend',   HandleButtonUp );
-
-        document.getElementById("quick_lock_button_id").addEventListener('touchstart', HandleButtonDown );
-        document.getElementById("quick_lock_button_id").addEventListener('touchend',   HandleButtonUp );
-
-        document.getElementById("clear_lock_button_id").addEventListener('touchstart', HandleButtonDown );
-        document.getElementById("clear_lock_button_id").addEventListener('touchend',   HandleButtonUp );
-
-        document.getElementById("bypass_cac_button_id").addEventListener('touchstart', HandleButtonDown );
-        document.getElementById("bypass_cac_button_id").addEventListener('touchend',   HandleButtonUp );
+        }
+        else
+        {
+            var myHtml = 
+                "<img src='img/header_main.png' width='100%' />" +
+                
+                   myBluetoothIcon +
+                   
+                  "<button id='reg_button_id'         type='button' class='mybutton' onclick='app.handleRegKey()'>       <img src='img/button_Register.png' />          </button>" +
+                "<button id='unreg_button_id'       type='button' class='mybutton' onclick='app.handleUnRegKey()'>     <img src='img/button_UnRegister.png' />        </button>" +
+                "<button id='quick_lock_button_id'  type='button' class='mybutton' onclick='app.handleQLockKey()'>     <img src='img/button_QuickLocationLock.png' /> </button>" +
+                "<button id='clear_lock_button_id'  type='button' class='mybutton' onclick='app.handleCLockKey()'>     <img src='img/button_ClearLocationLock.png' /> </button>" +
+                "<button id='bypass_cac_button_id'  type='button' class='mybutton' onclick='app.handleBypassCacKey()'> <img src='img/button_BypassCac.png' />         </button>" +
+                
+    //            szMyRssiLine +
+                szMyStatusLine;
+                  
+    
+            $('body').html(myHtml); 
+            
+    
+            // Make the buttons change when touched...    
+             document.getElementById("reg_button_id").addEventListener('touchstart', HandleButtonDown );
+             document.getElementById("reg_button_id").addEventListener('touchend',   HandleButtonUp );
+    
+            document.getElementById("unreg_button_id").addEventListener('touchstart', HandleButtonDown );
+            document.getElementById("unreg_button_id").addEventListener('touchend',   HandleButtonUp );
+    
+            document.getElementById("quick_lock_button_id").addEventListener('touchstart', HandleButtonDown );
+            document.getElementById("quick_lock_button_id").addEventListener('touchend',   HandleButtonUp );
+    
+            document.getElementById("clear_lock_button_id").addEventListener('touchstart', HandleButtonDown );
+            document.getElementById("clear_lock_button_id").addEventListener('touchend',   HandleButtonUp );
+    
+            document.getElementById("bypass_cac_button_id").addEventListener('touchstart', HandleButtonDown );
+            document.getElementById("bypass_cac_button_id").addEventListener('touchend',   HandleButtonUp );
+            UpdateStatusLine( "Wavetools ver: " + szVersion );
+        
+        }
         
         uMainLoopCounter = 0;
             
@@ -970,11 +990,10 @@ var app = {
         // Get the status in 4 seconds  
 //        WaitForBluetooth();
                 
-        UpdateStatusLine( "Wavetools ver: " + szVersion );
                         
         currentView = "main";
         
-        SpinnerStart( "", "Searching for Cel-Fi Devices..." );
+        SpinnerStart( "", "Searching harder for Cel-Fi Devices..." );
 
         
 //        UpdateRssiLine( -100 );               

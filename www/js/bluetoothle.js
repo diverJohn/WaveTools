@@ -603,8 +603,7 @@ function UpdateBluetoothIcon(cnx)
 {
     if(cnx)
     {
-      //util.deviceIdentified();
-        
+       
         if( isSouthBoundIfCnx == false )
         {
             PrintLog(1, "BT: Set isSouthBoundIfCnx to true" );
@@ -616,6 +615,15 @@ function UpdateBluetoothIcon(cnx)
             {
                 document.getElementById("bt_icon_id").innerHTML = szSbIfIconOn;
             }
+            
+            if(bWaveTest)
+            {
+                if( document.getElementById("bt_main_id").innerHTML != szSbIfMainOn )
+                {
+                    document.getElementById("bt_main_id").innerHTML = szSbIfMainOn;
+                }
+            }
+            
         }
         
         isSouthBoundIfCnx     = true;
@@ -631,6 +639,14 @@ function UpdateBluetoothIcon(cnx)
         if( document.getElementById("bt_icon_id").innerHTML != szSbIfIconOff )
         {
             document.getElementById("bt_icon_id").innerHTML = szSbIfIconOff;
+        }
+
+        if(bWaveTest)
+        {
+            if( document.getElementById("bt_main_id").innerHTML != szSbIfMainOff )
+            {
+                document.getElementById("bt_main_id").innerHTML = szSbIfMainOff;
+            }
         }
         
         isSouthBoundIfCnx     = false;
@@ -1928,7 +1944,7 @@ function HandleBtConfirmation(buttonIndex)
     // buttonIndex = 1 if 'Retry'
     if( buttonIndex == 1 )
     {
-        SpinnerStart( "", "Searching for Cel-Fi Devices..." );
+        SpinnerStart( "", "Searching for Cel-Fi Bluetooth Devices..." );
         RestartSouthBoundIf(true);
     }
 }
