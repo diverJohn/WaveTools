@@ -1796,20 +1796,43 @@ function GetDeviceSerialNumbersLoop()
         // Bug 1518.   If not able to get SN from list of MAC addresses then show error...
         if( numDevFound >= 1 )
         {
+            var outText = "";
+        
+            if( boardCfgList[firstFoundIdx] & BOARD_CFG_CABLE_BOX_BIT )
+            {
+                // Quatra type found...
+                if( boardCfgList[firstFoundIdx] & IM_A_CU_MASK )
+                {
+                    outText =  "Q-CU: ";
+                }
+                else
+                {
+                    outText =  "Q-NU: ";
+                }
+                outText += guiDeviceList[firstFoundIdx];
+                UpdateStatusLine( outText  );
+            }
+            else
+            {
+                if( boardCfgList[firstFoundIdx] & IM_A_CU_MASK )
+                {
+                    outText =  "CU: ";
+                }
+                else
+                {
+                    outText =  "NU: ";
+                }
+                outText += guiDeviceList[firstFoundIdx];
+                UpdateStatusLine( outText  );
+            }
+
+            PrintLog(1, "BT: firstFoundIdx=" + firstFoundIdx + "  " + outText );
+                    
             guiDeviceFlag   = false;
             myLastBtAddress = guiDeviceAddrList[firstFoundIdx];
             ConnectBluetoothDevice(guiDeviceAddrList[firstFoundIdx]);
             isSouthBoundIfListDone = true;      // Main app loop must be placed on hold until true.
             
-            if( boardCfgList[firstFoundIdx] & BOARD_CFG_CABLE_BOX_BIT )
-            {
-                // Quatra type found...
-                UpdateStatusLine( (boardCfgList[firstFoundIdx] & IM_A_CU_MASK)?"Q-CU: ":"Q-NU: " + guiDeviceList[firstFoundIdx]  );
-            }
-            else
-            {
-                UpdateStatusLine( (boardCfgList[firstFoundIdx] & IM_A_CU_MASK)?"CU: ":"NU: " + guiDeviceList[firstFoundIdx]  );
-            }
             
             
             // Start the saftey check...
