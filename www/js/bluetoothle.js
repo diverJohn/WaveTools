@@ -1664,7 +1664,8 @@ function GetDeviceSerialNumbersLoop()
                         {                    
                             boardCfgList[getSnIdx] = nxtyRxStatusBoardConfig;
                             
-                            if( (boardCfgList[getSnIdx] & BOARD_CFG_CABLE_BOX_BIT) == BOARD_CFG_USE_THIS_DEVICE )
+                            if( ((boardCfgList[getSnIdx] & BOARD_CFG_CABLE_BOX_BIT) == BOARD_CFG_USE_THIS_DEVICE)   ||
+                                (bWaveTest == true)   )                                                                     // For test we don't care about type.
                             {
                                 // Get the SN since this device meets our needs...
                                 GetNxtySuperMsgParamSelect( NXTY_SEL_PARAM_REG_SN_MSD_TYPE, NXTY_SEL_PARAM_REG_SN_LSD_TYPE );
@@ -1800,8 +1801,15 @@ function GetDeviceSerialNumbersLoop()
             ConnectBluetoothDevice(guiDeviceAddrList[firstFoundIdx]);
             isSouthBoundIfListDone = true;      // Main app loop must be placed on hold until true.
             
-            
-            UpdateStatusLine( (boardCfgList[firstFoundIdx] & IM_A_CU_MASK)?"CU: ":"NU: " + guiDeviceList[firstFoundIdx]  );
+            if( boardCfgList[getSnIdx] & BOARD_CFG_CABLE_BOX_BIT )
+            {
+                // Quatra type found...
+                UpdateStatusLine( (boardCfgList[firstFoundIdx] & IM_A_CU_MASK)?"Q-CU: ":"Q-NU: " + guiDeviceList[firstFoundIdx]  );
+            }
+            else
+            {
+                UpdateStatusLine( (boardCfgList[firstFoundIdx] & IM_A_CU_MASK)?"CU: ":"NU: " + guiDeviceList[firstFoundIdx]  );
+            }
             
             
             // Start the saftey check...
