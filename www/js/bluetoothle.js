@@ -1781,7 +1781,7 @@ function GetDeviceSerialNumbersLoop()
         PrintLog(1, "guiDeviceList          = " + JSON.stringify(guiDeviceList) );     // An array of Serial Numbers.
         PrintLog(1, "icdDeviceList          = " + JSON.stringify(icdDeviceList, stringifyReplaceToHex) );     // An array of ICD versions.
         PrintLog(1, "boardCfgList           = " + JSON.stringify(boardCfgList, stringifyReplaceToHex) + " if bit 14 set, 0x4000, then cable box"  );
-        PrintLog(1, "Number non-cable found = " + numDevFound );
+        PrintLog(1, "Number devices found   = " + numDevFound );
         
         
 
@@ -1801,7 +1801,7 @@ function GetDeviceSerialNumbersLoop()
             ConnectBluetoothDevice(guiDeviceAddrList[firstFoundIdx]);
             isSouthBoundIfListDone = true;      // Main app loop must be placed on hold until true.
             
-            if( boardCfgList[getSnIdx] & BOARD_CFG_CABLE_BOX_BIT )
+            if( boardCfgList[firstFoundIdx] & BOARD_CFG_CABLE_BOX_BIT )
             {
                 // Quatra type found...
                 UpdateStatusLine( (boardCfgList[firstFoundIdx] & IM_A_CU_MASK)?"Q-CU: ":"Q-NU: " + guiDeviceList[firstFoundIdx]  );
