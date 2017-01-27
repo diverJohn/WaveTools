@@ -254,8 +254,8 @@ function isConnectedCallback(obj)
         PrintLog(10, "BT: bluetooth cnx callback: Cnx" );
         UpdateBluetoothIcon( true );
 
-        // Check again in 15 seconds since we are connected...
-        BluetoothCnxTimer = setTimeout(BluetoothLoop, 15000);
+        // Check again in 10 seconds since we are connected...
+        BluetoothCnxTimer = setTimeout(BluetoothLoop, 10000);
 
         if( isBluetoothSubscribed == false )
         {
