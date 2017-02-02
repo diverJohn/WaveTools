@@ -36,7 +36,7 @@ var isNetworkConnected      = null;
 var bGotUserInfoRspFromCloud    = false;
 var bPrivacyViewed          = false;
 var msgTimer                = null; 
-var szVersion               = "00.02.07";
+var szVersion               = "00.02.08";
 var szSuccess               = "";
 var retryObject             = null;
 var retryCount              = 0;
@@ -44,7 +44,7 @@ var bSpinner                = false;
 var szNoStatus              = "No status response from unit so ICD version not known...kill app and retry";
 var bCnxToCu                = true;             // Set to true if connected locally to CU after reading local BoardConfig.
 var bCnxToOneBoxNu          = false;            // Set to true if connected to a 1-Box NU, all UART redirects are disabled.
-var bWaveTest               = true;            // Set to false for normal WaveTools or true for Bluetooth test only.                
+var bWaveTest               = false;            // Set to false for normal WaveTools or true for Bluetooth test only.                
 
 // Determine which messages get sent to the console.  1 normal, 10 verbose.
 // Level  1: Flow and errors.
