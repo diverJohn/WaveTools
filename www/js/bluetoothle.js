@@ -438,7 +438,10 @@ function startScanSuccess(obj)
             if( i == nxty128Uuid.length )
             {
                 PrintLog(10, "BT: Android: Cel-Fi device found based on 128-bit UUID" );
-                bDeviceFound = true;
+                if( obj.address == "05:04:03:02:01:00" )
+                {
+                    bDeviceFound = true;
+                }
             }
             else if( obj.name == "Nextivity Bridge" )
             {
